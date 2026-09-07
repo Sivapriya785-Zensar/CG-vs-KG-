@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>KG vs CG</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+  :root {
+    --bg: #ffffff; --panel: #f7faff; --border: #d7e2f2; --text: #16202c;
+    --muted: #64748b; --accent: #2563eb; --accent-2: #eaf1ff;
+    --good: #16a34a; --bad: #dc2626; --warn: #b45309;
+  }
+  * { box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, Segoe UI, sans-serif; margin: 0; height: 100vh; display: flex; flex-direction: column; }
+
+  .topbar { display: flex; align-items: center; gap: 10px; padding: 9px 14px; border-bottom: 1px solid var(--border); flex-wrap: wrap; flex-shrink: 0; }
+  .topbar .title { font-size: 13px; font-weight: 600; margin-right: 2px; color: var(--accent); }
+  #status { width: 8px; height: 8px; border-radius: 50%; background: var(--bad); flex-shrink: 0; }
+  #status.ok { background: var(--good); }
+
+  .mode-toggle { display: flex; background: #fff; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+  .mode-toggle label { padding: 5px 10px; font-size: 12px; cursor: pointer; color: var(--muted); }
+  .mode-toggle input { display: none; }
+  .mode-toggle input:checked + label { background: var(--accent); color: #fff; }
+
+  .switch { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); cursor: pointer; user-select: none; }
+  .switch input { display: none; }
+  .switch .track { width: 30px; height: 17px; background: var(--border); border-radius: 999px; position: relative; transition: background .15s; flex-shrink: 0; }
+  .switch .track::after { content: ""; position: absolute; width: 13px; height: 13px; border-radius: 50%; background: #fff; top: 2px; left: 2px; transition: left .15s; box-shadow: 0 1px 2px rgba(0,0,0,.2); }
+  .switch input:checked + .track { background: var(--kg-color, var(--accent)); }
+  .switch input:checked + .track::after { left: 15px; }
+  .switch .switch-label { font-weight: 600; }
+  .switch input:checked ~ .switch-label { color: var(--kg-color, var(--accent)); }
+  #kgSwitch .track { --kg-color: #7c3aed; }
+  #kgSwitch input:checked + .track { background: #7c3aed; }
+  #kgSwitch input:checked ~ .switch-label { color: #7c3aed; }
+  #cgSwitch input:checked + .track { background: var(--accent); }
+  #cgSwitch input:checked ~ .switch-label { color: var(--accent); }
+
+  .main { flex: 1; display: flex; min-height: 0; }
+
+  .graphs { width: 340px; flex-shrink: 0; border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; }
+  .graph-panel { border-bottom: 1px solid var(--border); padding: 10px 12px; }
+  .graph-panel h3 { font-size: 11px; font-weight: 700; letter-spacing: .04em; margin: 0 0 6px; text-transform: uppercase; }
+  .graph-panel.kg h3 { color: #7c3aed; }
+  .graph-panel.cg h3 { color: var(--accent); }
+  .graph-panel svg { width: 100%; height: 210px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; }
+  .graph-empty { font-size: 11.5px; color: var(--muted); }
+  .fallback-note { font-size: 11px; color: var(--warn); background: #fef3e2; border: 1px solid #fde3bb; border-radius: 5px; padding: 4px 7px; margin-top: 6px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 10px; font-size: 10px; color: var(--muted); margin-top: 6px; }
+  .legend span { display: inline-flex; align-items: center; gap: 3px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+
+  .chatcol { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  .thread { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+
+  .msg { max-width: 80%; padding: 8px 12px; border-radius: 11px; font-size: 13.5px; line-height: 1.5; white-space: pre-wrap; }
+  .msg.user { align-self: flex-end; background: var(--accent); color: #fff; border-bottom-right-radius: 3px; }
+  .msg.assistant { align-self: flex-start; background: var(--panel); border: 1px solid var(--border); border-bottom-left-radius: 3px; }
+  .msg.system { align-self: center; background: transparent; border: 1px dashed var(--border); color: var(--muted); font-size: 12px; max-width: 90%; }
+  .msg .meta { display: flex; gap: 6px; align-items: center; margin-top: 6px; font-size: 10.5px; color: var(--muted); font-family: monospace; }
+  .tag { font-weight: 700; letter-spacing: .03em; }
+  .tag.kg { color: #7c3aed; }
+  .tag.cg { color: var(--accent); }
+  .pill { padding: 1px 6px; border-radius: 999px; font-size: 10px; }
+  .pill.fallback { background: #fef3e2; color: var(--warn); }
+  .pill.cache { background: #e9f9ee; color: var(--good); }
+
+  .inputbar { display: flex; gap: 8px; padding: 10px 14px; border-top: 1px solid var(--border); align-items: center; flex-shrink: 0; }
+  .inputbar input[type=text] { flex: 1; background: #fff; color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 13.5px; }
+  .inputbar input[type=text]:focus { outline: none; border-color: var(--accent); }
+  button { background: var(--accent-2); color: var(--accent); border: 1px solid var(--border); border-radius: 6px; padding: 6px 11px; font-size: 12px; cursor: pointer; }
+  button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  button.primary:hover { background: #1d4fd1; }
+  button:disabled { opacity: .5; cursor: default; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="title">KG vs CG</span>
+  <span id="status"></span>
+  <div class="mode-toggle">
+    <input type="radio" name="mode" id="modeQuestion" checked><label for="modeQuestion">Question</label>
+    <input type="radio" name="mode" id="modeStatement"><label for="modeStatement">Statement</label>
+  </div>
+  <label class="switch" id="kgSwitch"><input type="checkbox" id="kgToggle" checked><span class="track"></span><span class="switch-label">Apply KG</span></label>
+  <label class="switch" id="cgSwitch"><input type="checkbox" id="cgToggle" checked><span class="track"></span><span class="switch-label">Apply CG</span></label>
+  <label class="switch" id="cacheSwitchWrap"><input type="checkbox" id="cacheToggle"><span class="track"></span><span class="switch-label">cache</span></label>
+</div>
+
+<div class="main">
+  <div class="graphs">
+    <div class="graph-panel kg">
+      <h3>KG graph</h3>
+      <svg id="svgKG"></svg>
+      <div id="kgNote"></div>
+    </div>
+    <div class="graph-panel cg">
+      <h3>CG graph</h3>
+      <svg id="svgCG"></svg>
+      <div id="cgNote"></div>
+      <div class="legend">
+        <span><span class="dot" style="background:#f59e0b"></span>evidence (this session)</span>
+        <span><span class="dot" style="background:#9333ea"></span>evidence (prior session)</span>
+        <span><span class="dot" style="background:#94a3b8"></span>rejected</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="chatcol">
+    <div class="thread" id="thread"></div>
+    <div class="inputbar">
+      <input type="text" id="inputBox" placeholder="Ask a question, or switch to Statement to declare a fact...">
+      <button class="primary" id="submitBtn">Send</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = "";
+const userId = "customer-" + Math.random().toString(36).slice(2, 10);
+const sessionId = "ui-" + Math.random().toString(36).slice(2, 10);
+
+const typeColor = {
+  ProductCategory: "#2563eb", ReturnRule: "#7c3aed", ExchangeRule: "#0891b2",
+  LoyaltyTier: "#d97706", PromoBlackout: "#dc2626", Fee: "#059669",
+  WarrantyProduct: "#c026d3", Evidence: "#f59e0b"
+};
+
+function nodeColor(n) {
+  if (n.status === "rejected") return "#94a3b8";
+  if (n.is_evidence) return n.origin === "prior_session" ? "#9333ea" : "#f59e0b";
+  return typeColor[n.type] || "#64748b";
+}
+
+function renderGraph(svgId, graph) {
+  const svg = d3.select(svgId);
+  svg.selectAll("*").remove();
+  const node0 = svg.node();
+  const width = node0.clientWidth || 300, height = 210;
+  if (!graph || !graph.nodes || graph.nodes.length === 0) {
+    svg.append("text").attr("x", width / 2).attr("y", height / 2).attr("text-anchor", "middle")
+      .attr("fill", "#94a3b8").attr("font-size", 11).text("(no graph for this query)");
+    return;
+  }
+  const nodes = graph.nodes.map(d => ({ ...d }));
+  const links = graph.links.map(d => ({ ...d }));
+
+  const sim = d3.forceSimulation(nodes)
+    .force("link", d3.forceLink(links).id(d => d.id).distance(55))
+    .force("charge", d3.forceManyBody().strength(-120))
+    .force("center", d3.forceCenter(width / 2, height / 2))
+    .force("collide", d3.forceCollide(22));
+
+  const link = svg.append("g").attr("stroke", "#c7d2e3").attr("stroke-width", 1)
+    .selectAll("line").data(links).join("line");
+
+  const node = svg.append("g").selectAll("circle").data(nodes).join("circle")
+    .attr("r", d => d.is_seed ? 8 : 6)
+    .attr("fill", nodeColor)
+    .attr("stroke", d => d.status === "rejected" ? "#dc2626" : (d.is_seed ? "#16202c" : "#fff"))
+    .attr("stroke-dasharray", d => d.status === "rejected" ? "2,2" : null)
+    .attr("stroke-width", 1.3)
+    .attr("opacity", d => d.status === "rejected" ? 0.55 : 1)
+    .call(d3.drag()
+      .on("start", (e, d) => { if (!e.active) sim.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
+      .on("drag", (e, d) => { d.fx = e.x; d.fy = e.y; })
+      .on("end", (e, d) => { if (!e.active) sim.alphaTarget(0); d.fx = null; d.fy = null; }));
+
+  node.append("title").text(d => {
+    let t = `${d.label} (${d.type})`;
+    if (d.status === "rejected") t += " -- rejected (conflict)";
+    if (d.is_evidence) t += d.origin === "prior_session" ? " -- evidence, prior session" : " -- evidence, this session";
+    return t;
+  });
+
+  const label = svg.append("g").selectAll("text").data(nodes).join("text")
+    .text(d => d.label).attr("font-size", 8.5).attr("fill", "#3a4658")
+    .attr("dx", 8).attr("dy", 3);
+
+  sim.on("tick", () => {
+    link.attr("x1", d => d.source.x).attr("y1", d => d.source.y)
+      .attr("x2", d => d.target.x).attr("y2", d => d.target.y);
+    node.attr("cx", d => d.x).attr("cy", d => d.y);
+    label.attr("x", d => d.x).attr("y", d => d.y);
+  });
+}
+
+function addMsg(role, text, meta) {
+  const thread = document.getElementById("thread");
+  const div = document.createElement("div");
+  div.className = "msg " + role;
+  div.textContent = text;
+  if (meta) {
+    const m = document.createElement("div");
+    m.className = "meta";
+    m.innerHTML = meta;
+    div.appendChild(m);
+  }
+  thread.appendChild(div);
+  thread.scrollTop = thread.scrollHeight;
+}
+
+async function checkHealth() {
+  const el = document.getElementById("status");
+  try {
+    const r = await fetch(API + "/api/health");
+    const j = await r.json();
+    el.className = j.ollama_available ? "ok" : "";
+    el.title = j.ollama_available ? `connected (${j.model})` : `not connected -- ${j.ollama_url}`;
+  } catch (e) {
+    el.className = "";
+    el.title = "backend unreachable";
+  }
+}
+
+function setMode(isStatement) {
+  document.getElementById("modeStatement").checked = isStatement;
+  document.getElementById("modeQuestion").checked = !isStatement;
+  document.getElementById("submitBtn").textContent = isStatement ? "Store" : "Send";
+  ["kgSwitch", "cgSwitch", "cacheSwitchWrap"].forEach(id => {
+    document.getElementById(id).style.visibility = isStatement ? "hidden" : "visible";
+  });
+  document.getElementById("inputBox").placeholder = isStatement
+    ? "Declare a fact, e.g. \"I already declined the rental car insurance\"..."
+    : "Ask a question...";
+}
+document.getElementById("modeQuestion").onchange = () => setMode(false);
+document.getElementById("modeStatement").onchange = () => setMode(true);
+
+async function submit() {
+  const text = document.getElementById("inputBox").value.trim();
+  if (!text) return;
+  const isStatement = document.getElementById("modeStatement").checked;
+  const btn = document.getElementById("submitBtn");
+  btn.disabled = true;
+
+  try {
+    if (isStatement) {
+      const r = await fetch(API + "/api/statement", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user_id: userId, session_id: sessionId, text })
+      });
+      const data = await r.json();
+      addMsg("user", text);
+      addMsg("system", r.ok ? data.message : `Error: ${data.detail}`);
+      document.getElementById("inputBox").value = "";
+      return;
+    }
+
+    const useKg = document.getElementById("kgToggle").checked;
+    const useCg = document.getElementById("cgToggle").checked;
+    if (!useKg && !useCg) { addMsg("system", "Enable Apply KG and/or Apply CG first."); return; }
+
+    addMsg("user", text);
+    const r = await fetch(API + "/api/query", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user_id: userId, session_id: sessionId, query: text, use_cache: document.getElementById("cacheToggle").checked })
+    });
+    if (!r.ok) {
+      const err = await r.json();
+      addMsg("system", `Error: ${err.detail}`);
+      return;
+    }
+    const data = await r.json();
+
+    if (useKg) {
+      renderGraph("#svgKG", data.kg.graph_json);
+      document.getElementById("kgNote").innerHTML = "";
+      addMsg("assistant", data.kg.answer, `<span class="tag kg">KG</span> ${data.kg.total_tokens} tokens (${data.kg.prompt_tokens}+${data.kg.completion_tokens})`);
+    }
+    if (useCg) {
+      renderGraph("#svgCG", data.cg.graph_json);
+      const noteEl = document.getElementById("cgNote");
+      noteEl.innerHTML = data.cg.fell_back
+        ? `<div class="fallback-note">Fell back to KG-static: ${data.cg.fallback_reason}</div>`
+        : "";
+      let meta = `<span class="tag cg">CG</span> ${data.cg.total_tokens} tokens (${data.cg.prompt_tokens}+${data.cg.completion_tokens})`;
+      if (data.cg.served_from_cache) meta += ` <span class="pill cache">cache</span>`;
+      else if (data.cg.fell_back) meta += ` <span class="pill fallback">fallback</span>`;
+      addMsg("assistant", data.cg.answer, meta);
+    }
+
+    document.getElementById("inputBox").value = "";
+  } catch (e) {
+    addMsg("system", "Error: " + e);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+document.getElementById("submitBtn").onclick = submit;
+document.getElementById("inputBox").addEventListener("keydown", (e) => { if (e.key === "Enter") submit(); });
+
+renderGraph("#svgKG", null);
+renderGraph("#svgCG", null);
+checkHealth();
+setInterval(checkHealth, 15000);
+</script>
+</body>
+</html>

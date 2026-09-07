@@ -1,0 +1,326 @@
+{
+  "nodes": [
+    {
+      "id": "product_category:electronics",
+      "type": "ProductCategory",
+      "label": "Electronics",
+      "aliases": [
+        "electronics",
+        "tech",
+        "gadgets"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "product_category:apparel",
+      "type": "ProductCategory",
+      "label": "Apparel",
+      "aliases": [
+        "clothing",
+        "fashion",
+        "garment"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "product_category:furniture",
+      "type": "ProductCategory",
+      "label": "Furniture",
+      "aliases": [
+        "furniture",
+        "home",
+        "decor"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "product_category:groceries",
+      "type": "ProductCategory",
+      "label": "Groceries",
+      "aliases": [
+        "food",
+        "grocery",
+        "pantry"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "product_category:digital_goods",
+      "type": "ProductCategory",
+      "label": "Digital Goods",
+      "aliases": [
+        "digital",
+        "download",
+        "software"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "rule:return_electronics",
+      "type": "ReturnRule",
+      "label": "Return Electronics",
+      "aliases": [
+        "return electronics",
+        "electronics return"
+      ],
+      "attrs": {
+        "refundable": true,
+        "fee_usd": 15,
+        "window_days": 30
+      }
+    },
+    {
+      "id": "rule:return_apparel",
+      "type": "ReturnRule",
+      "label": "Return Apparel",
+      "aliases": [
+        "return clothing",
+        "clothing return"
+      ],
+      "attrs": {
+        "refundable": true,
+        "fee_usd": null,
+        "window_days": 45
+      }
+    },
+    {
+      "id": "rule:return_furniture",
+      "type": "ReturnRule",
+      "label": "Return Furniture",
+      "aliases": [
+        "return furniture",
+        "furniture return"
+      ],
+      "attrs": {
+        "refundable": true,
+        "fee_usd": 50,
+        "window_days": 14
+      }
+    },
+    {
+      "id": "rule:return_digital_goods",
+      "type": "ReturnRule",
+      "label": "Return Digital Goods",
+      "aliases": [
+        "return digital",
+        "digital return"
+      ],
+      "attrs": {
+        "refundable": false
+      }
+    },
+    {
+      "id": "rule:exchange_standard",
+      "type": "ExchangeRule",
+      "label": "Standard Exchange",
+      "aliases": [
+        "exchange standard",
+        "standard exchange"
+      ],
+      "attrs": {
+        "allowed": true,
+        "fee_usd": 10
+      }
+    },
+    {
+      "id": "rule:exchange_free",
+      "type": "ExchangeRule",
+      "label": "Free Exchange",
+      "aliases": [
+        "free exchange",
+        "exchange free"
+      ],
+      "attrs": {
+        "allowed": true,
+        "fee_usd": null
+      }
+    },
+    {
+      "id": "rule:exchange_none",
+      "type": "ExchangeRule",
+      "label": "No Exchange",
+      "aliases": [
+        "no exchange",
+        "exchange none"
+      ],
+      "attrs": {
+        "allowed": false
+      }
+    },
+    {
+      "id": "tier:bronze",
+      "type": "LoyaltyTier",
+      "label": "Bronze",
+      "aliases": [
+        "bronze",
+        "basic",
+        "entry"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "tier:silver",
+      "type": "LoyaltyTier",
+      "label": "Silver",
+      "aliases": [
+        "silver",
+        "premium",
+        "mid-tier"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "tier:gold",
+      "type": "LoyaltyTier",
+      "label": "Gold",
+      "aliases": [
+        "gold",
+        "high-end",
+        "top-tier"
+      ],
+      "attrs": {
+        "fee_usd": 10
+      }
+    },
+    {
+      "id": "tier:platinum",
+      "type": "LoyaltyTier",
+      "label": "Platinum",
+      "aliases": [
+        "platinum",
+        "ultimate",
+        "elite"
+      ],
+      "attrs": {
+        "fee_usd": null
+      }
+    },
+    {
+      "id": "product:extended_warranty",
+      "type": "WarrantyProduct",
+      "label": "Extended Warranty",
+      "aliases": [
+        "warranty",
+        "extended warranty",
+        "protection plan"
+      ],
+      "attrs": {
+        "cost_usd": 25,
+        "covers": "Electronics and Furniture"
+      }
+    },
+    {
+      "id": "promo:blackout:holiday_sale",
+      "type": "PromoBlackout",
+      "label": "Holiday Sale Blackout",
+      "aliases": [
+        "holiday sale",
+        "black friday",
+        "christmas"
+      ],
+      "attrs": {
+        "dates": "November 25th - December 5th"
+      }
+    },
+    {
+      "id": "promo:blackout:clearance_event",
+      "type": "PromoBlackout",
+      "label": "Clearance Event Blackout",
+      "aliases": [
+        "clearance event",
+        "january sale",
+        "new year"
+      ],
+      "attrs": {
+        "dates": "January 2nd - January 15th"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "rule:return_electronics",
+      "target": "product_category:electronics",
+      "relation": "has_return_policy"
+    },
+    {
+      "source": "rule:return_apparel",
+      "target": "product_category:apparel",
+      "relation": "has_return_policy"
+    },
+    {
+      "source": "rule:return_furniture",
+      "target": "product_category:furniture",
+      "relation": "has_return_policy"
+    },
+    {
+      "source": "rule:return_digital_goods",
+      "target": "product_category:digital_goods",
+      "relation": "has_return_policy"
+    },
+    {
+      "source": "rule:exchange_standard",
+      "target": "rule:return_electronics",
+      "relation": "waives"
+    },
+    {
+      "source": "rule:exchange_standard",
+      "target": "rule:return_furniture",
+      "relation": "waives"
+    },
+    {
+      "source": "rule:exchange_free",
+      "target": "product_category:apparel",
+      "relation": "has_exchange_policy"
+    },
+    {
+      "source": "tier:gold",
+      "target": "rule:exchange_standard",
+      "relation": "exempt_from"
+    },
+    {
+      "source": "tier:platinum",
+      "target": "rule:exchange_standard",
+      "relation": "exempt_from"
+    },
+    {
+      "source": "tier:platinum",
+      "target": "rule:return_furniture",
+      "relation": "exempt_from"
+    },
+    {
+      "source": "product:extended_warranty",
+      "target": "product_category:electronics",
+      "relation": "covers"
+    },
+    {
+      "source": "product:extended_warranty",
+      "target": "product_category:furniture",
+      "relation": "covers"
+    },
+    {
+      "source": "promo:blackout:holiday_sale",
+      "target": "product_category:electronics",
+      "relation": "restricts"
+    },
+    {
+      "source": "tier:gold",
+      "target": "promo:blackout:holiday_sale",
+      "relation": "exempt_from"
+    },
+    {
+      "source": "tier:platinum",
+      "target": "promo:blackout:holiday_sale",
+      "relation": "exempt_from"
+    },
+    {
+      "source": "promo:blackout:clearance_event",
+      "target": "product_category:apparel",
+      "relation": "restricts"
+    },
+    {
+      "source": "tier:platinum",
+      "target": "promo:blackout:clearance_event",
+      "relation": "exempt_from"
+    }
+  ]
+}

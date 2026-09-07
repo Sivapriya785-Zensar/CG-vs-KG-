@@ -163,5 +163,6 @@ cython_debug/
 
 qdrant_storage
 *.sqlite
+*.db
 *.DS_Store
 *.bkp*
