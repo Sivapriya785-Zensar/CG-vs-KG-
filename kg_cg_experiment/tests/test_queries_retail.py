@@ -1,0 +1,255 @@
+"""
+50-question Direct/Reasoning/Mixed set for the RETAIL domain (17/17/16),
+written as unstructured, real-life customer messages -- lowercase, run-on,
+informal, sometimes mid-thought, the way people actually type into a chat
+box, not clean grammatical prose.
+
+This is a methodology fix on the earlier airline-domain reasoning set
+(test_queries_reasoning.py), not a rigged rerun. That set's own review
+(results_reasoning/quality_review.md) found that writing "conversational"
+questions often accidentally restated the personalizing fact directly in
+the query text ("since I'm Gold tier...") -- which lets KG answer correctly
+with ZERO memory, because the fact never left the current turn. That's not
+a fair test of whether CG's stored evidence helps; it's a coin flip on
+phrasing. Every personalized item below keeps the fact generic in the query
+("given my status", "whatever tier I end up being") specifically so KG
+genuinely cannot know it and CG genuinely has to recall it -- a fair test,
+not a rigged one. One item (R14) unavoidably references a just-stated
+recent action and is marked `leak_free=False` rather than passed off as
+clean.
+
+`leak_free=True` means: KG has no way to answer this correctly except by
+guessing (no evidence in the query text at all), so a correct answer from
+CG that KG can't match is a genuine memory-driven result, not a phrasing
+artifact.
+
+The move to unstructured phrasing carries a real risk of its own: the
+KG/CG seed-matching in graph/seed_matching.py works by exact alias
+substring, so a casual paraphrase can accidentally drop below the surface
+form the graph recognizes. Every question here was checked with a live,
+free (no LLM) script -- match_seed_nodes() against the real KG -- to
+confirm it still seeds correctly despite the informal wording; two real
+gaps that check caught (people naturally say "holiday sale" or "clearance
+event" without the word "blackout") were fixed by broadening those two
+aliases in data/policy_dataset.py, not by cleaning up the question's
+wording -- the messiness is the point.
+
+Expected answers are grounded directly against data/policy_dataset.py's
+real edges, verified edge-by-edge, not guessed at what "sounds right."
+Grading is manual (read the raw transcript), not keyword heuristics -- see
+run_queries_retail_tests.py.
+"""
+
+DIRECT = [
+    {"id": "D1", "category": "direct", "leak_free": True, "seed_statements": [],
+     "query": "hey so i wanna order some groceries online but idk what happens if i don't like it when it shows up... can i actually return that stuff or nah",
+     "expected_answer": "No -- Groceries are non-returnable, no exceptions.",
+     "why": "rule:return_groceries refundable=False."},
+    {"id": "D2", "category": "direct", "leak_free": True, "seed_statements": [],
+     "query": "quick q before i buy this furniture piece -- if it doesn't work out and i gotta send it back, how much is that gonna cost me",
+     "expected_answer": "$50 restocking fee.",
+     "why": "rule:return_furniture fee_usd=50."},
+    {"id": "D3", "category": "direct", "leak_free": True, "seed_statements": [],
+     "query": "ok so i have this electronics item i need to return, how much is the fee and how long do i actually have to do it",
+     "expected_answer": "$15 fee, 30-day window.",
+     "why": "rule:return_electronics fee_usd=15, window_days=30."},
+    {"id": "D4", "category": "direct", "leak_free": True, "seed_statements": [],
+     "query": "bought some apparel, not sure it's gonna fit right tbh. if i return it is there a fee or what",
+     "expected_answer": "$0, no fee.",
+     "why": "rule:return_apparel fee_usd=0."},
+    {"id": "D5", "category": "direct", "leak_free": True, "seed_statements": [],
+     "query": "so i downloaded this digital goods thing and now i'm kinda regretting it lol, is there ANY way to get a refund",
+     "expected_answer": "No, non-returnable once downloaded or activated.",
+     "why": "rule:return_digital_goods refundable=False."},
+    {"id": "D6", "category": "direct", "leak_free": True, "seed_statements": ["I am a Gold tier member."],
+     "query": "given my loyalty status rn, would the exchange fee actually get waived if i swap something out",
+     "expected_answer": "Yes -- Gold waives the exchange fee.",
+     "why": "tier:gold -waives-> fee:exchange_fee_waiver -applies_to-> rule:exchange_standard."},
+    {"id": "D7", "category": "direct", "leak_free": True, "seed_statements": [],
+     "query": "ok random question but which loyalty tier(s) actually get the restocking fee waived completely, like all the way",
+     "expected_answer": "Platinum only.",
+     "why": "only tier:platinum -waives-> fee:restocking_fee_waiver."},
+    {"id": "D8", "category": "direct", "leak_free": True, "seed_statements": [],
+     "query": "keep seeing this extended warranty thing pop up when i checkout -- how much is it and what does it even cover",
+     "expected_answer": "$25; covers defect and damage claims beyond the manufacturer warranty period.",
+     "why": "product:extended_warranty cost_usd=25, attrs.covers."},
+    {"id": "D9", "category": "direct", "leak_free": True, "seed_statements": ["I already declined the extended warranty."],
+     "query": "wait before this ships can u just confirm -- did i end up adding that extended warranty or not, i genuinely forget",
+     "expected_answer": "No, you declined it.",
+     "why": "direct recall of the stored warranty.status=declined trace."},
+    {"id": "D10", "category": "direct", "leak_free": True, "seed_statements": [],
+     "query": "i want to swap my electronics item for a different model, is that even allowed and how much would it cost me",
+     "expected_answer": "Yes, $10 fee.",
+     "why": "rule:exchange_standard: allowed=True, fee_usd=10."},
+    {"id": "D11", "category": "direct", "leak_free": True, "seed_statements": [],
+     "query": "when's the holiday sale blackout thing exactly and what category does it mess with",
+     "expected_answer": "Nov 25 - Dec 5, restricts Electronics.",
+     "why": "blackout:holiday_sale attrs.dates + restricts edge to product_category:electronics."},
+    {"id": "D12", "category": "direct", "leak_free": True, "seed_statements": ["I am a Platinum member."],
+     "query": "been a member here a long time now -- would my restocking fee get waived if i return an electronics item",
+     "expected_answer": "Yes -- Platinum waives the restocking fee, which applies to Electronics.",
+     "why": "tier:platinum -waives-> fee:restocking_fee_waiver -applies_to-> rule:return_electronics."},
+    {"id": "D13", "category": "direct", "leak_free": True, "seed_statements": [],
+     "query": "can i exchange a groceries order instead of just returning it or is that not a thing",
+     "expected_answer": "No, exchanges aren't allowed for Groceries at all.",
+     "why": "rule:exchange_none for groceries: allowed=False."},
+    {"id": "D14", "category": "direct", "leak_free": True, "seed_statements": [],
+     "query": "whats the deal with the clearance event dates, like start and end exactly",
+     "expected_answer": "Jan 2 - Jan 15.",
+     "why": "blackout:clearance_event attrs.dates."},
+    {"id": "D15", "category": "direct", "leak_free": True, "seed_statements": ["I bought Furniture on my last order."],
+     "query": "for whatever i ordered last time, what's the exchange fee gonna be if i wanna swap it",
+     "expected_answer": "$10 -- Furniture uses the standard exchange rule.",
+     "why": "product_category:furniture -> rule:exchange_standard, fee_usd=10."},
+    {"id": "D16", "category": "direct", "leak_free": True, "seed_statements": [],
+     "query": "out of all the tiers which ones dodge the holiday sale blackout",
+     "expected_answer": "Gold and Platinum.",
+     "why": "tier:gold and tier:platinum both -exempt_from-> blackout:holiday_sale."},
+    {"id": "D17", "category": "direct", "leak_free": True, "seed_statements": ["I already purchased the extended warranty."],
+     "query": "so i think i paid extra for protection on this order -- if my furniture item shows up busted does that cover the return fee",
+     "expected_answer": "Yes -- warranty covers Furniture returns for defect/damage.",
+     "why": "product:extended_warranty -covers-> rule:return_furniture; warranty=purchased trace."},
+]
+
+REASONING = [
+    {"id": "R1", "category": "reasoning", "leak_free": True, "seed_statements": ["I am a Gold tier member."],
+     "query": "ok i keep hearing the top tier gets crazy perks on fees but honestly idk where i land tier-wise -- would my restocking fee actually be waived or is that only for ppl higher than me",
+     "expected_answer": "No -- Gold only waives the exchange fee, not restocking. Restocking-fee waiver is Platinum-only.",
+     "why": "tier:gold has only one waives edge (exchange_fee_waiver); restocking_fee_waiver is waived only by tier:platinum."},
+    {"id": "R2", "category": "reasoning", "leak_free": True, "seed_statements": ["I am a Gold tier member."],
+     "query": "so this is landing smack in the middle of the clearance period, does my status get me around that or is that exemption only for a different blackout",
+     "expected_answer": "No -- Gold is exempt from Holiday Sale only, not Clearance Event. Only Platinum is exempt from Clearance Event.",
+     "why": "tier:gold -exempt_from-> holiday_sale only; tier:platinum -exempt_from-> both."},
+    {"id": "R3", "category": "reasoning", "leak_free": True, "seed_statements": ["I already purchased the extended warranty."],
+     "query": "not 100% sure if i have protection coverage on this order tbh -- if i do and i'm returning apparel does that even apply or is it only for certain stuff",
+     "expected_answer": "No -- warranty covers only Electronics and Furniture returns, not Apparel (Apparel returns are already free anyway, but the coverage claim itself would be false).",
+     "why": "product:extended_warranty covers only rule:return_electronics and rule:return_furniture."},
+    {"id": "R4", "category": "reasoning", "leak_free": True, "seed_statements": [],
+     "query": "if someone's groceries order shows up and they want a refund, does ANYTHING help them out here -- status, protection, whatever -- or is it just a hard no",
+     "expected_answer": "Nothing helps -- Groceries has no connection to any waiver or warranty; it's simply non-returnable regardless of tier or coverage.",
+     "why": "no tier or warranty edge touches rule:return_groceries anywhere in the schema."},
+    {"id": "R5", "category": "reasoning", "leak_free": True, "seed_statements": ["I am a Platinum member."],
+     "query": "between my account status and any seasonal stuff, could i even order electronics during the holiday sale without it being a problem to return later",
+     "expected_answer": "Yes -- Platinum is exempt from the Holiday Sale blackout, so the restriction doesn't apply.",
+     "why": "blackout:holiday_sale -restricts-> electronics; tier:platinum -exempt_from-> holiday_sale."},
+    {"id": "R6", "category": "reasoning", "leak_free": True, "seed_statements": ["I am a Bronze member."],
+     "query": "whatever tier i end up being, does that get me the exchange fee waiver or the restocking one or neither lol",
+     "expected_answer": "No -- Bronze has zero waivers in this policy.",
+     "why": "tier:bronze has no waives edges anywhere."},
+    {"id": "R7", "category": "reasoning", "leak_free": True, "seed_statements": [],
+     "query": "if someone buys furniture and wants to both return it AND separately maybe exchange it instead, is that literally the same fee or two diff things",
+     "expected_answer": "Two different rules -- the Furniture Return Rule ($50) and the Standard Exchange Rule ($10) -- not one combined 'change your mind' fee.",
+     "why": "rule:return_furniture and rule:exchange_standard are distinct nodes with different fees."},
+    {"id": "R8", "category": "reasoning", "leak_free": True, "seed_statements": ["I already declined the extended warranty."],
+     "query": "not sure if i added extra coverage to this electronics order or not -- if it breaks what am i actually paying, and would it be different either way",
+     "expected_answer": "Since coverage was declined, the full $15 restocking fee applies if returned; if warranty had been purchased, it would have covered the defect claim on Electronics instead.",
+     "why": "warranty=declined trace; product:extended_warranty covers rule:return_electronics."},
+    {"id": "R9", "category": "reasoning", "leak_free": True, "seed_statements": ["I am a Gold tier member."],
+     "query": "thinking about exchanging an apparel item later, given my account status should i expect to pay anything or does tier not even matter here",
+     "expected_answer": "No fee either way -- Apparel exchanges are already free regardless of tier, so Gold's waiver doesn't change anything here.",
+     "why": "rule:exchange_free (Apparel) is already fee_usd=0, independent of any tier waiver."},
+    {"id": "R10", "category": "reasoning", "leak_free": True, "seed_statements": [],
+     "query": "ok weird question but looking at both blackout periods, is there a tier that AINT fully exempt from at least one of em",
+     "expected_answer": "Yes -- Bronze, Silver, and Gold are all not exempt from at least one blackout (Bronze/Silver from both, Gold specifically from Clearance Event); only Platinum is exempt from both.",
+     "why": "tier:bronze/silver: no exempt_from edges. tier:gold: holiday_sale only. tier:platinum: both."},
+    {"id": "R11", "category": "reasoning", "leak_free": True, "seed_statements": ["I am a Platinum member."],
+     "query": "wanna exchange a groceries item instead of returning it -- does my status open that up or is groceries just locked no matter what",
+     "expected_answer": "No -- Groceries exchanges aren't allowed at all, unconditionally; no tier overrides this.",
+     "why": "rule:exchange_none for groceries: allowed=False; no tier edge touches it."},
+    {"id": "R12", "category": "reasoning", "leak_free": True, "seed_statements": ["I am a Gold tier member."],
+     "query": "if my electronics return also has a restocking fee attached does my status waive THAT too or just the exchange one",
+     "expected_answer": "No -- the restocking fee CAN be waived, but only by Platinum, not Gold. You'd still pay the $15 fee.",
+     "why": "fee:restocking_fee_waiver applies_to rule:return_electronics, but only tier:platinum waives that fee."},
+    {"id": "R13", "category": "reasoning", "leak_free": True, "seed_statements": [],
+     "query": "electronics vs furniture -- is it the same tiers that get the exchange fee waived or does that differ between them",
+     "expected_answer": "Identical -- both use the Standard Exchange Rule, so the same Gold/Platinum waiver applies equally to both.",
+     "why": "both product_category:electronics and product_category:furniture -> rule:exchange_standard."},
+    {"id": "R14", "category": "reasoning", "leak_free": False, "seed_statements": ["I already used my exchange on this order once before."],
+     "query": "so i mentioned i already swapped this electronics thing once before -- does that change anything if i wanna do it again",
+     "expected_answer": "The graph itself has no 'one exchange per order' limit (it would simply say: allowed, $10 fee) -- but a prior exchange on record is worth flagging as a possible edge case rather than silently ignored.",
+     "why": "exchange.prior_count is an off-schema fact (no kg_node_id) -- tests honest handling of evidence the static graph doesn't have a rule for.",
+     "note": "leak_free=False: the question necessarily references the just-stated prior exchange to ask about it -- graded as a reasoning-quality item, not a memory-recall item."},
+    {"id": "R15", "category": "reasoning", "leak_free": True, "seed_statements": ["I am a Gold tier member."],
+     "query": "looking at a digital goods purchase, does my account status change anything about returning or exchanging it if i end up hating it",
+     "expected_answer": "No -- Digital Goods can be neither returned nor exchanged at all, regardless of tier.",
+     "why": "rule:return_digital_goods refundable=False; rule:exchange_none for digital_goods allowed=False; neither has any tier connection."},
+    {"id": "R16", "category": "reasoning", "leak_free": True, "seed_statements": [],
+     "query": "is there like a case where paying for the warranty is literally pointless bc you'd get the same protection for free anyway",
+     "expected_answer": "Yes -- Apparel exchanges are already free and warranty doesn't even cover Apparel returns anyway, so it adds nothing there.",
+     "why": "rule:exchange_free fee_usd=0; product:extended_warranty's covers list excludes apparel entirely."},
+    {"id": "R17", "category": "reasoning", "leak_free": True, "seed_statements": ["I am a Gold tier member."],
+     "query": "trying to return a groceries order -- does my status get me a refund here or is that policy just a hard wall no matter the tier",
+     "expected_answer": "Absolute -- Groceries' non-refundable rule has no tier connection at all. Gold doesn't help here.",
+     "why": "rule:return_groceries refundable=False; no tier edge touches it."},
+]
+
+MIXED = [
+    {"id": "M1", "category": "mixed", "leak_free": True, "seed_statements": ["I am a Gold tier member."],
+     "query": "two things -- whats the standard exchange fee on electronics, and given my status would i actually have to pay it",
+     "expected_answer": "$10 standard fee; waived to $0 for Gold.",
+     "why": "rule:exchange_standard fee_usd=10; tier:gold waives fee:exchange_fee_waiver which applies_to it."},
+    {"id": "M2", "category": "mixed", "leak_free": True, "seed_statements": [],
+     "query": "whats the restocking fee on a furniture return, and does the warranty cover that if u have it",
+     "expected_answer": "$50 fee; yes, warranty covers Furniture returns.",
+     "why": "rule:return_furniture fee_usd=50; product:extended_warranty covers rule:return_furniture."},
+    {"id": "M3", "category": "mixed", "leak_free": True, "seed_statements": ["I am a Platinum member."],
+     "query": "can u tell me the holiday sale dates and also does my status get me around that restriction",
+     "expected_answer": "Nov 25 - Dec 5; yes, Platinum is exempt.",
+     "why": "blackout:holiday_sale dates; tier:platinum exempt_from holiday_sale."},
+    {"id": "M4", "category": "mixed", "leak_free": True, "seed_statements": [],
+     "query": "how much is the warranty even, and would it cover an apparel return",
+     "expected_answer": "$25; no -- warranty doesn't cover Apparel (and Apparel returns are already free anyway).",
+     "why": "product:extended_warranty cost_usd=25; covers list excludes apparel."},
+    {"id": "M5", "category": "mixed", "leak_free": True, "seed_statements": ["I already declined the extended warranty."],
+     "query": "whats the exchange fee for furniture, and also totally unrelated but did i end up adding that protection plan to my order",
+     "expected_answer": "$10 (unrelated first part); no, you declined it.",
+     "why": "tests whether the model keeps two unrelated facts straight without conflating them."},
+    {"id": "M6", "category": "mixed", "leak_free": True, "seed_statements": ["I am a Gold tier member."],
+     "query": "which tiers waive the restocking fee and does my status put me in that group",
+     "expected_answer": "Only Platinum; no, Gold is not in that group.",
+     "why": "only tier:platinum -waives-> fee:restocking_fee_waiver."},
+    {"id": "M7", "category": "mixed", "leak_free": True, "seed_statements": [],
+     "query": "clearance event dates pls, and is any tier exempt from that one",
+     "expected_answer": "Jan 2 - Jan 15; Platinum only.",
+     "why": "blackout:clearance_event dates; only tier:platinum exempt_from it."},
+    {"id": "M8", "category": "mixed", "leak_free": True, "seed_statements": ["I bought Furniture on my last order."],
+     "query": "whats the exchange fee for whatever i ordered last time, and separately is that category even exchangeable or is it locked like groceries",
+     "expected_answer": "$10 (Furniture, standard exchange rule); yes, allowed -- unlike Groceries, which cannot be exchanged at all.",
+     "why": "product_category:furniture -> rule:exchange_standard (allowed=True, fee=10) vs rule:exchange_none for groceries."},
+    {"id": "M9", "category": "mixed", "leak_free": True, "seed_statements": [],
+     "query": "does warranty cover an electronics return, and can u even exchange electronics for a different model instead of refunding",
+     "expected_answer": "Yes, warranty covers it; yes, exchange is allowed ($10 fee).",
+     "why": "product:extended_warranty covers rule:return_electronics; rule:exchange_standard allowed=True."},
+    {"id": "M10", "category": "mixed", "leak_free": True, "seed_statements": ["I am a Platinum member."],
+     "query": "whats the restocking fee for electronics normally and would my status change that number at all",
+     "expected_answer": "$15 normally; waived to $0 for Platinum.",
+     "why": "rule:return_electronics fee_usd=15; tier:platinum waives fee:restocking_fee_waiver which applies_to it."},
+    {"id": "M11", "category": "mixed", "leak_free": True, "seed_statements": [],
+     "query": "are the exchange fees the same for electronics and furniture, and does warranty help with either one",
+     "expected_answer": "Yes, both $10; no -- the warranty covers RETURNS for those categories, not the exchange fee itself, so it doesn't apply here.",
+     "why": "both -> rule:exchange_standard (fee=10); product:extended_warranty's covers edges point only to return rules, never exchange rules."},
+    {"id": "M12", "category": "mixed", "leak_free": True, "seed_statements": ["I am a Gold tier member."],
+     "query": "holiday sale dates again pls, and does my status specifically get me around THAT one",
+     "expected_answer": "Nov 25 - Dec 5; yes, Gold is exempt from Holiday Sale specifically.",
+     "why": "blackout:holiday_sale dates; tier:gold exempt_from holiday_sale."},
+    {"id": "M13", "category": "mixed", "leak_free": True, "seed_statements": [],
+     "query": "whats the fee difference between exchanging groceries vs furniture, in actual dollars",
+     "expected_answer": "Groceries exchanges aren't permitted at all -- there's no fee because there's no option. Furniture is $10.",
+     "why": "rule:exchange_none (groceries) allowed=False vs rule:exchange_standard (furniture) fee_usd=10."},
+    {"id": "M14", "category": "mixed", "leak_free": True, "seed_statements": ["I already purchased the extended warranty."],
+     "query": "if i do have protection coverage, walk me thru the cost if i return electronics vs furniture",
+     "expected_answer": "Both covered by warranty -- the $15 Electronics fee and the $50 Furniture fee are both waived by the coverage.",
+     "why": "product:extended_warranty covers both rule:return_electronics and rule:return_furniture."},
+    {"id": "M15", "category": "mixed", "leak_free": True, "seed_statements": [],
+     "query": "which category has the lowest return fee, and is that the same one with the lowest exchange fee too",
+     "expected_answer": "Lowest return fee ($0): Apparel (Groceries/Digital Goods aren't $0 -- they're simply not returnable at all, a different thing). Lowest exchange fee ($0): also Apparel. Same category.",
+     "why": "rule:return_apparel fee_usd=0 vs return_groceries/digital_goods refundable=False (not comparable as a '$' figure); rule:exchange_free (apparel) fee_usd=0 vs exchange_none (groceries/digital) allowed=False."},
+    {"id": "M16", "category": "mixed", "leak_free": True, "seed_statements": ["I am a Bronze member."],
+     "query": "given my status would either fee get waived on an electronics order or am i paying both fees straight up",
+     "expected_answer": "Pay both in full -- Bronze has no waivers of any kind.",
+     "why": "tier:bronze has no waives edges at all."},
+]
+
+ALL_RETAIL_QUERIES = DIRECT + REASONING + MIXED
+
+LEAK_FREE_COUNT = sum(1 for q in ALL_RETAIL_QUERIES if q["leak_free"])

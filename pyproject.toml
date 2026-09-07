@@ -20,6 +20,13 @@ aiohttp = "^3.10.5"
 tqdm = "^4.66.5"
 more-itertools = "^10.5.0"
 
+# kg_cg_experiment/ -- local Ollama-backed KG vs CG experiment, no
+# dependency on the packages above (langgraph/qdrant/etc are unused by it)
+fastapi = "^0.140.0"
+uvicorn = "^0.51.0"
+networkx = "^3.6.1"
+requests = "^2.34.2"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
