@@ -1,18 +1,4 @@
-"""
-Decision mode: the agent picks a structured ACTION, not free text.
 
-Everything before this file tested whether KG/CG produce a good *answer*.
-That's necessary but not sufficient for an agentic claim -- an agent's
-memory only matters if it changes what the agent *does*. This module makes
-that testable: both conditions are constrained to emit exactly one action
-from a fixed set, parsed structurally, so "did the evidence change the
-decision" is a hard equality check, not a judgment call about phrasing.
-
-Same isolation discipline as the rest of the system: same system prompt
-template, same LLM, same call shape for both conditions -- only the graph
-context (and CG's evidence) differs. On fallback, CG's decision prompt is
-byte-identical to KG's.
-"""
 import re
 from dataclasses import dataclass, field
 

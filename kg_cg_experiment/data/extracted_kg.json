@@ -6,7 +6,7 @@
       "label": "Electronics",
       "aliases": [
         "electronics",
-        "tech",
+        "electronic devices",
         "gadgets"
       ],
       "attrs": {}
@@ -18,7 +18,7 @@
       "aliases": [
         "clothing",
         "fashion",
-        "garment"
+        "garments"
       ],
       "attrs": {}
     },
@@ -28,8 +28,8 @@
       "label": "Furniture",
       "aliases": [
         "furniture",
-        "home",
-        "decor"
+        "furnishings",
+        "household items"
       ],
       "attrs": {}
     },
@@ -39,8 +39,8 @@
       "label": "Groceries",
       "aliases": [
         "food",
-        "grocery",
-        "pantry"
+        "grocery items",
+        "pantry staples"
       ],
       "attrs": {}
     },
@@ -49,8 +49,8 @@
       "type": "ProductCategory",
       "label": "Digital Goods",
       "aliases": [
-        "digital",
-        "download",
+        "digital products",
+        "downloads",
         "software"
       ],
       "attrs": {}
@@ -60,8 +60,8 @@
       "type": "ReturnRule",
       "label": "Return Electronics",
       "aliases": [
-        "return electronics",
-        "electronics return"
+        "return electronics policy",
+        "electronics return window"
       ],
       "attrs": {
         "refundable": true,
@@ -74,8 +74,8 @@
       "type": "ReturnRule",
       "label": "Return Apparel",
       "aliases": [
-        "return clothing",
-        "clothing return"
+        "return clothing policy",
+        "apparel return window"
       ],
       "attrs": {
         "refundable": true,
@@ -88,8 +88,8 @@
       "type": "ReturnRule",
       "label": "Return Furniture",
       "aliases": [
-        "return furniture",
-        "furniture return"
+        "return furniture policy",
+        "furniture return window"
       ],
       "attrs": {
         "refundable": true,
@@ -98,24 +98,40 @@
       }
     },
     {
+      "id": "rule:return_groceries",
+      "type": "ReturnRule",
+      "label": "Return Groceries",
+      "aliases": [
+        "return groceries policy",
+        "groceries return window"
+      ],
+      "attrs": {
+        "refundable": false,
+        "fee_usd": null,
+        "window_days": null
+      }
+    },
+    {
       "id": "rule:return_digital_goods",
       "type": "ReturnRule",
       "label": "Return Digital Goods",
       "aliases": [
-        "return digital",
-        "digital return"
+        "return digital products policy",
+        "digital goods return window"
       ],
       "attrs": {
-        "refundable": false
+        "refundable": false,
+        "fee_usd": null,
+        "window_days": null
       }
     },
     {
       "id": "rule:exchange_standard",
       "type": "ExchangeRule",
-      "label": "Standard Exchange",
+      "label": "Standard Exchange Rule",
       "aliases": [
-        "exchange standard",
-        "standard exchange"
+        "exchange electronics policy",
+        "exchange furniture policy"
       ],
       "attrs": {
         "allowed": true,
@@ -125,10 +141,10 @@
     {
       "id": "rule:exchange_free",
       "type": "ExchangeRule",
-      "label": "Free Exchange",
+      "label": "Free Exchange Rule",
       "aliases": [
-        "free exchange",
-        "exchange free"
+        "free exchange policy",
+        "apparel exchange policy"
       ],
       "attrs": {
         "allowed": true,
@@ -138,13 +154,14 @@
     {
       "id": "rule:exchange_none",
       "type": "ExchangeRule",
-      "label": "No Exchange",
+      "label": "No Exchange Rule",
       "aliases": [
-        "no exchange",
-        "exchange none"
+        "no exchange policy",
+        "groceries and digital goods exchange policy"
       ],
       "attrs": {
-        "allowed": false
+        "allowed": false,
+        "fee_usd": null
       }
     },
     {
@@ -152,9 +169,8 @@
       "type": "LoyaltyTier",
       "label": "Bronze",
       "aliases": [
-        "bronze",
-        "basic",
-        "entry"
+        "bronze tier",
+        "basic tier"
       ],
       "attrs": {}
     },
@@ -163,9 +179,8 @@
       "type": "LoyaltyTier",
       "label": "Silver",
       "aliases": [
-        "silver",
-        "premium",
-        "mid-tier"
+        "silver tier",
+        "premium tier"
       ],
       "attrs": {}
     },
@@ -174,65 +189,76 @@
       "type": "LoyaltyTier",
       "label": "Gold",
       "aliases": [
-        "gold",
-        "high-end",
-        "top-tier"
+        "gold tier",
+        "gold membership"
       ],
-      "attrs": {
-        "fee_usd": 10
-      }
+      "attrs": {}
     },
     {
       "id": "tier:platinum",
       "type": "LoyaltyTier",
       "label": "Platinum",
       "aliases": [
-        "platinum",
-        "ultimate",
-        "elite"
+        "platinum tier",
+        "platinum membership"
       ],
-      "attrs": {
-        "fee_usd": null
-      }
+      "attrs": {}
     },
     {
-      "id": "product:extended_warranty",
-      "type": "WarrantyProduct",
-      "label": "Extended Warranty",
-      "aliases": [
-        "warranty",
-        "extended warranty",
-        "protection plan"
-      ],
-      "attrs": {
-        "cost_usd": 25,
-        "covers": "Electronics and Furniture"
-      }
-    },
-    {
-      "id": "promo:blackout:holiday_sale",
+      "id": "blackout:holiday_sale",
       "type": "PromoBlackout",
       "label": "Holiday Sale Blackout",
       "aliases": [
-        "holiday sale",
-        "black friday",
-        "christmas"
+        "black friday sale",
+        "holiday sale window"
       ],
       "attrs": {
         "dates": "November 25th - December 5th"
       }
     },
     {
-      "id": "promo:blackout:clearance_event",
+      "id": "blackout:clearance_event",
       "type": "PromoBlackout",
       "label": "Clearance Event Blackout",
       "aliases": [
-        "clearance event",
-        "january sale",
-        "new year"
+        "clearance sale",
+        "january clearance window"
       ],
       "attrs": {
         "dates": "January 2nd - January 15th"
+      }
+    },
+    {
+      "id": "fee:exchange_fee_waiver",
+      "type": "Fee",
+      "label": "Exchange Fee Waiver",
+      "aliases": [
+        "exchange fee waiver",
+        "exchange fee exemption"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "fee:restocking_fee_waiver",
+      "type": "Fee",
+      "label": "Restocking Fee Waiver",
+      "aliases": [
+        "restocking fee waiver",
+        "restocking fee exemption"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "product:extended_warranty",
+      "type": "WarrantyProduct",
+      "label": "Extended Warranty",
+      "aliases": [
+        "extended warranty policy",
+        "extended warranty coverage"
+      ],
+      "attrs": {
+        "cost_usd": 25,
+        "covers": "defect and damage claims beyond manufacturer's warranty"
       }
     }
   ],
@@ -253,19 +279,24 @@
       "relation": "has_return_policy"
     },
     {
+      "source": "rule:return_groceries",
+      "target": "product_category:groceries",
+      "relation": "has_return_policy"
+    },
+    {
       "source": "rule:return_digital_goods",
       "target": "product_category:digital_goods",
       "relation": "has_return_policy"
     },
     {
       "source": "rule:exchange_standard",
-      "target": "rule:return_electronics",
-      "relation": "waives"
+      "target": "product_category:electronics",
+      "relation": "has_exchange_policy"
     },
     {
       "source": "rule:exchange_standard",
-      "target": "rule:return_furniture",
-      "relation": "waives"
+      "target": "product_category:furniture",
+      "relation": "has_exchange_policy"
     },
     {
       "source": "rule:exchange_free",
@@ -273,54 +304,64 @@
       "relation": "has_exchange_policy"
     },
     {
+      "source": "rule:exchange_none",
+      "target": "product_category:groceries",
+      "relation": "has_exchange_policy"
+    },
+    {
+      "source": "rule:exchange_none",
+      "target": "product_category:digital_goods",
+      "relation": "has_exchange_policy"
+    },
+    {
       "source": "tier:gold",
-      "target": "rule:exchange_standard",
-      "relation": "exempt_from"
+      "target": "fee:exchange_fee_waiver",
+      "relation": "waives"
     },
     {
       "source": "tier:platinum",
-      "target": "rule:exchange_standard",
-      "relation": "exempt_from"
+      "target": "fee:exchange_fee_waiver",
+      "relation": "waives"
     },
     {
       "source": "tier:platinum",
-      "target": "rule:return_furniture",
-      "relation": "exempt_from"
+      "target": "fee:restocking_fee_waiver",
+      "relation": "waives"
     },
     {
-      "source": "product:extended_warranty",
-      "target": "product_category:electronics",
-      "relation": "covers"
-    },
-    {
-      "source": "product:extended_warranty",
-      "target": "product_category:furniture",
-      "relation": "covers"
-    },
-    {
-      "source": "promo:blackout:holiday_sale",
+      "source": "blackout:holiday_sale",
       "target": "product_category:electronics",
       "relation": "restricts"
     },
     {
-      "source": "tier:gold",
-      "target": "promo:blackout:holiday_sale",
-      "relation": "exempt_from"
-    },
-    {
-      "source": "tier:platinum",
-      "target": "promo:blackout:holiday_sale",
-      "relation": "exempt_from"
-    },
-    {
-      "source": "promo:blackout:clearance_event",
+      "source": "blackout:clearance_event",
       "target": "product_category:apparel",
       "relation": "restricts"
     },
     {
-      "source": "tier:platinum",
-      "target": "promo:blackout:clearance_event",
+      "source": "tier:gold",
+      "target": "blackout:holiday_sale",
       "relation": "exempt_from"
+    },
+    {
+      "source": "tier:platinum",
+      "target": "blackout:holiday_sale",
+      "relation": "exempt_from"
+    },
+    {
+      "source": "tier:platinum",
+      "target": "blackout:clearance_event",
+      "relation": "exempt_from"
+    },
+    {
+      "source": "product:extended_warranty",
+      "target": "product_category:electronics",
+      "relation": "applies_to"
+    },
+    {
+      "source": "product:extended_warranty",
+      "target": "product_category:furniture",
+      "relation": "applies_to"
     }
   ]
 }

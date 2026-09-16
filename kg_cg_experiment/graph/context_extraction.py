@@ -23,6 +23,7 @@ statements.
 """
 import math
 
+from kg_cg_experiment import config
 from kg_cg_experiment.agent.llm_client import embed
 from kg_cg_experiment.data.unstructured_policy_document import POLICY_DOCUMENT_TEXT
 
@@ -52,20 +53,23 @@ def _embedded_chunks() -> list[tuple[str, list[float]]]:
     return _CHUNK_CACHE
 
 
-def retrieve_relevant_chunks(query: str, top_k: int = 3, threshold: float = 0.45) -> list[tuple[str, float]]:
+def retrieve_relevant_chunks(query: str, top_k: int = 3, threshold: float | None = None) -> list[tuple[str, float]]:
     """Real cosine similarity, computed fresh every call against a real
-    query embedding. threshold is looser than the decision-trace path's
-    0.65 -- these chunks are multi-sentence paragraphs covering several
-    facts at once, so similarity to any one query is naturally diluted
-    compared to a single declarative statement; a tighter threshold here
-    would just starve CG of context it should have. top_k=3 (not 2): an
-    empirical check (see README.md) found adjacent paragraphs sharing
-    enough vocabulary -- both the tier and blackout paragraphs discuss tier
-    exemptions -- that the single best-scoring chunk for a tier-fee
-    question was sometimes a different, only-tangentially-related chunk;
-    3 of this document's 8 chunks keeps real recall without returning
-    everything. Returns [] (not a fallback trigger -- this layer is
-    additive, not required) when nothing clears the bar."""
+    query embedding. threshold defaults to config.CHUNK_SIMILARITY_THRESHOLD
+    (looser than the decision-trace path's 0.65) -- these chunks are
+    multi-sentence paragraphs covering several facts at once, so similarity
+    to any one query is naturally diluted compared to a single declarative
+    statement; a tighter threshold here would just starve CG of context it
+    should have. top_k=3 (not 2): an empirical check (see README.md) found
+    adjacent paragraphs sharing enough vocabulary -- both the tier and
+    blackout paragraphs discuss tier exemptions -- that the single
+    best-scoring chunk for a tier-fee question was sometimes a different,
+    only-tangentially-related chunk; 3 of this document's paragraphs keeps
+    real recall without returning everything. Returns [] (not a fallback
+    trigger -- this layer is additive, not required) when nothing clears
+    the bar."""
+    if threshold is None:
+        threshold = config.CHUNK_SIMILARITY_THRESHOLD
     query_embedding = embed(query)
     scored = [(chunk, _cosine(query_embedding, chunk_embedding)) for chunk, chunk_embedding in _embedded_chunks()]
     scored.sort(key=lambda x: -x[1])

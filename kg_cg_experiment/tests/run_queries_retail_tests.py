@@ -1,22 +1,4 @@
-"""
-Runs the 50-question retail Direct/Reasoning/Mixed set live, both
-conditions, real Ollama chat + real embeddings, unique user_id per item so
-unrelated test cases never share trace-store state.
 
-Not run as part of building this -- costs real tokens on your local Ollama
-instance. Run it yourself; see the command at the bottom of README.md.
-
-No keyword-heuristic auto-grading -- same reasoning as run_reasoning_tests.py:
-answer quality on reasoning questions can't be reduced to substring
-matching without misleading grades. This script produces the raw,
-verifiable transcript only; grading is a manual pass against it.
-
-Writes, under kg_cg_experiment/results_retail/:
-  - raw_log.md   every seed statement, every KG/CG answer, real token counts,
-                 and whether the question was leak_free (a fair memory test)
-                 or not, per test_queries_retail.py
-  - index.md     one line per question for fast scanning while grading
-"""
 import datetime
 import sys
 from pathlib import Path
@@ -87,7 +69,7 @@ def run_all():
 
     (RESULTS_DIR / "raw_log.md").write_text("".join(raw_lines), encoding="utf-8")
     (RESULTS_DIR / "index.md").write_text("".join(index_lines), encoding="utf-8")
-    print(f"Wrote raw_log.md and index.md under {RESULTS_DIR}")
+    print(f"Wrote raw_log.md under {RESULTS_DIR}")
 
 
 if __name__ == "__main__":

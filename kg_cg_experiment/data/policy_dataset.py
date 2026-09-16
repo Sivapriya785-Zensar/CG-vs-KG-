@@ -1,36 +1,4 @@
-"""
-Retail customer-support policy dataset -- the design-time schema the
-Knowledge Graph is built from (product categories, return/exchange rules,
-promo blackout windows, loyalty tiers, extended warranty). This is fixed
-content, not an experiment result -- authored once, at design time, and
-traversed as-is at runtime.
 
-Domain note: this replaced an earlier airline-policy version of this file.
-Retail return/refund/exchange decisions are a more immediately legible
-"customer support agent" scenario for a general audience than airline fare
-rules, and map onto the exact same graph shape (product category ~ booking
-type, return rule ~ cancellation rule, exchange rule ~ change rule, promo
-blackout ~ travel blackout, extended warranty ~ travel insurance) -- so the
-KG/CG mechanics needed no rework, only the content. Historical results in
-results/ and results_reasoning/ were produced against the OLD airline
-schema and are kept as-is for the record; they don't apply to this schema
-and haven't been re-run against it (see README.md).
-
-Every node carries `aliases`, a list of lowercase phrases used for
-deterministic keyword matching from a user query to a seed node (see
-graph/seed_matching.py). No LLM is involved in building or seeding the KG --
-it is traversed as-is.
-
-Intentional asymmetries (kept from the original design, because they're what
-make reasoning questions actually testable instead of trivially guessable):
-  - Gold waives the EXCHANGE fee only; Platinum waives both exchange and
-    restocking fees.
-  - Gold is exempt from the Holiday Sale blackout only; Platinum is exempt
-    from both blackouts.
-  - Extended warranty covers Electronics and Furniture returns only -- not
-    Apparel, Groceries, or Digital Goods.
-  - Groceries and Digital Goods can be neither returned nor exchanged at all.
-"""
 
 NODES = [
     # Product categories

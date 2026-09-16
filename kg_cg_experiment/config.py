@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434")
-OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "llama3")
+OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "llama3:8b")
 OLLAMA_TIMEOUT_S = int(os.environ.get("OLLAMA_TIMEOUT_S", "120"))
 
 # Local embedding model for genuine similarity-based trace matching (not a
@@ -22,6 +22,13 @@ TRACE_SIMILARITY_THRESHOLD = float(os.environ.get("TRACE_SIMILARITY_THRESHOLD", 
 # relevant," so it requires a tighter paraphrase match.
 CACHE_SIMILARITY_THRESHOLD = float(os.environ.get("CACHE_SIMILARITY_THRESHOLD", "0.85"))
 
+# Cosine-similarity threshold for the unstructured track's live document-chunk
+# retrieval (graph/context_extraction.py). Looser than TRACE_SIMILARITY_THRESHOLD
+# because a multi-sentence paragraph dilutes similarity compared to a single
+# declarative statement: relevant chunks measured 0.53-0.74, irrelevant ones
+# 0.33-0.37 on this embedding model.
+CHUNK_SIMILARITY_THRESHOLD = float(os.environ.get("CHUNK_SIMILARITY_THRESHOLD", "0.45"))
+
 TRACE_DB_PATH = os.environ.get(
     "TRACE_DB_PATH",
     str(Path(__file__).resolve().parent / "data" / "traces.db"),
@@ -29,7 +36,7 @@ TRACE_DB_PATH = os.environ.get(
 
 # Deterministic generation: temperature 0 to minimize LLM-stochasticity noise
 # in a measurement experiment (not a tuning exercise).
-OLLAMA_OPTIONS = {"temperature": 0, "seed": 42}
+OLLAMA_OPTIONS = {"temperature": float(os.environ.get("OLLAMA_TEMPERATURE", "0")), "seed": 42}
 
 # Recent conversation turns included as literal evidence for Condition B (CG).
 CG_RECENT_TURNS_WINDOW = int(os.environ.get("CG_RECENT_TURNS_WINDOW", "8"))

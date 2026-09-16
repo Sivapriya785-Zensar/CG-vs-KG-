@@ -1,26 +1,18 @@
 # Raw log -- unstructured-data-source track
 
-Generated: 2026-09-08T02:08:07.153468
-Extracted KG: 19 nodes, 17 edges (see data/extracted_kg.json, produced by graph/extract_kg_from_text.py).
+Generated: 2026-09-09T09:56:28.403747
+Extracted KG: 22 nodes, 20 edges (see data/extracted_kg.json, produced by graph/extract_kg_from_text.py).
 
 ## D1 (direct, leak_free=True)
 **Query:** hey so i wanna order some groceries online but idk what happens if i don't like it when it shows up... can i actually return that stuff or nah
 **Expected:** No -- Groceries are non-returnable, no exceptions.
 **Why (grounding):** rule:return_groceries refundable=False.
 
-**KG-unstructured (291 tokens, 120+171):**
-> According to our return policy, you can return or exchange items that don't meet your expectations. Here are the details:
+**KG-unstructured (170 tokens, 120+50):**
+> According to our return policy, you can return or exchange items within 30 days of delivery. You'll need to provide the original packaging and any included accessories. A restocking fee of 10% of the item's price will be applied.
 
-* You have 30 days from the delivery date to initiate a return or exchange.
-* Items must be in their original condition with all packaging and tags intact.
-* You'll need to contact our customer service team to obtain a Return Merchandise Authorization (RMA) number before sending back the item.
-* Returns are free for orders over $50. For orders under $50, there's a $5 return shipping fee.
-* Refunds will be issued in the original form of payment, minus any shipping costs.
-
-Please note that some items, like perishable food items, may have specific return or exchange requirements. If you're unsure about a specific item, feel free to ask, and we'll do our best to help.
-
-**CG-unstructured (393 tokens, 325+68, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to our policy, groceries are non-returnable, full stop. This means that even if you're not satisfied with the groceries when they arrive, we won't be able to accept a return. This is due to the risk of spoilage and food safety concerns. Once the groceries leave our warehouse, they can't be returned.
+**CG-unstructured (384 tokens, 325+59, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> According to our policy, groceries are non-returnable, regardless of the reason. This means you won't be able to return them if you don't like them or if they arrive damaged. If you have issues with a damaged shipment, you should contact the shipping carrier to file a claim.
 Context-extraction layer retrieved:
   - (sim=0.691) "Groceries and Digital Goods are both non-returnable, full stop, no exceptions, and support reps shou..."
   - (sim=0.654) ""Can I return groceries if they arrived damaged?" -- Groceries are non-returnable under this policy ..."
@@ -31,14 +23,14 @@ Context-extraction layer retrieved:
 **Expected:** $50 restocking fee.
 **Why (grounding):** rule:return_furniture fee_usd=50.
 
-**KG-unstructured (308 tokens, 273+35):**
-> According to our ReturnRule 'Return Furniture', the fee for returning a furniture piece is $50. Additionally, you have a 14-day window to initiate the return.
+**KG-unstructured (301 tokens, 260+41):**
+> According to our return policy, if you need to return the furniture piece, you'll be charged a fee of $50. You'll also need to initiate the return within 14 days of purchase.
 
-**CG-unstructured (575 tokens, 526+49, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to our policy, if you need to return the furniture piece, you'll be charged a restocking fee of $50. Additionally, you'll have a 14-day window to initiate the return, as mentioned in the policy excerpt.
+**CG-unstructured (556 tokens, 513+43, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> According to our return policy, if you need to return the furniture piece, you'll be charged a restocking fee of $50. You'll also need to initiate the return within 14 days of delivery.
 Context-extraction layer retrieved:
   - (sim=0.674) "Furniture works a little differently. You've got a shorter window here, just 14 days, and the restoc..."
-  - (sim=0.644) "If a customer would rather swap an electronics item for something else instead of getting a refund, ..."
+  - (sim=0.643) "If a customer would rather swap an electronics item for something else instead of getting a refund, ..."
   - (sim=0.604) "Apparel is the most forgiving category by a wide margin. You get a generous 45 days to send things b..."
 
 ## D3 (direct, leak_free=True)
@@ -46,11 +38,11 @@ Context-extraction layer retrieved:
 **Expected:** $15 fee, 30-day window.
 **Why (grounding):** rule:return_electronics fee_usd=15, window_days=30.
 
-**KG-unstructured (381 tokens, 346+35):**
-> According to our Return Rule 'Return Electronics', the fee for returning an electronics item is $15. Additionally, you have a 30-day window to make the return.
+**KG-unstructured (366 tokens, 333+33):**
+> According to our Return Policy, the fee for returning an Electronics item is $15. You have 30 days from the date of purchase to initiate the return.
 
-**CG-unstructured (694 tokens, 655+39, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to our ReturnRule 'Return Electronics', the fee for returning an electronics item is $15. You have 30 days from the delivery date on the shipping confirmation to return the item.
+**CG-unstructured (675 tokens, 642+33, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> According to our policy, the return fee for electronics is $15. You have 30 days from the delivery date on the shipping confirmation to initiate the return.
 Context-extraction layer retrieved:
   - (sim=0.710) "Electronics can be sent back within 30 days of delivery, though we do charge a $15 restocking fee to..."
   - (sim=0.703) "If a customer would rather swap an electronics item for something else instead of getting a refund, ..."
@@ -61,11 +53,11 @@ Context-extraction layer retrieved:
 **Expected:** $0, no fee.
 **Why (grounding):** rule:return_apparel fee_usd=0.
 
-**KG-unstructured (181 tokens, 113+68):**
-> According to our return policy, if you're not satisfied with the fit, you can return the apparel within 30 days of purchase. There is no fee for returns, but you will need to pay for return shipping. If you'd like to exchange the item for a different size or style, we'll cover the cost of shipping.
+**KG-unstructured (146 tokens, 113+33):**
+> According to our return policy, there is a $7.99 restocking fee for all returns. Additionally, the original shipping cost is non-refundable.
 
-**CG-unstructured (310 tokens, 264+46, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> No fee! According to our policy, apparel returns are free, and you have 45 days to send it back. We absorb the cost of the return as part of our effort to keep the clothing category low-friction.
+**CG-unstructured (285 tokens, 264+21, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> No, there is no fee for returning apparel. You have 45 days to send it back.
 Context-extraction layer retrieved:
   - (sim=0.722) "Apparel is the most forgiving category by a wide margin. You get a generous 45 days to send things b..."
   - (sim=0.630) "Our return policies vary quite a bit depending on what you bought, and we get a lot of questions abo..."
@@ -76,11 +68,11 @@ Context-extraction layer retrieved:
 **Expected:** No, non-returnable once downloaded or activated.
 **Why (grounding):** rule:return_digital_goods refundable=False.
 
-**KG-unstructured (189 tokens, 144+45):**
-> I'm sorry to hear that you're not satisfied with your digital goods purchase. According to our policy, digital goods are not refundable. The Return Rule for Digital Goods explicitly states that they are not eligible for refunds.
+**KG-unstructured (161 tokens, 113+48):**
+> According to our policy, digital goods are non-refundable. However, if you purchased the digital goods within the last 30 days, you may be eligible for a store credit. Please contact our customer support team for further assistance.
 
-**CG-unstructured (454 tokens, 387+67, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> I'm sorry to hear that you're not satisfied with your digital goods purchase. Unfortunately, according to our policy, digital goods are non-returnable and non-refundable. The Return Digital Goods policy explicitly states that digital goods are not refundable, and our support reps are not authorized to make exceptions, even in sympathetic situations.
+**CG-unstructured (403 tokens, 355+48, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> Unfortunately, our policy states that Digital Goods are non-returnable and non-exchangeable. Once downloaded or activated, they cannot be returned or exchanged. This is due to the nature of digital products, which cannot be un-downloaded.
 Context-extraction layer retrieved:
   - (sim=0.596) "Groceries and Digital Goods are both non-returnable, full stop, no exceptions, and support reps shou..."
   - (sim=0.519) "As covered above, Groceries and Digital Goods support neither returns nor exchanges. There is no exc..."
@@ -92,11 +84,11 @@ Context-extraction layer retrieved:
 **Why (grounding):** tier:gold -waives-> fee:exchange_fee_waiver -applies_to-> rule:exchange_standard.
 - Seed: "I am a Gold tier member." -> Stored: loyalty_tier.tier = Gold
 
-**KG-unstructured (164 tokens, 106+58):**
-> According to our loyalty program policy, as a Silver member, you are eligible for a one-time waiver of the exchange fee per year. This waiver is valid for exchanges made within 30 days of purchase. If you exchange an item within this timeframe, the exchange fee will be waived.
+**KG-unstructured (119 tokens, 106+13):**
+> I don't have information on loyalty status or exchange fees.
 
-**CG-unstructured (461 tokens, 415+46, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> As a Gold member, yes, the exchange fee would be waived if you decide to swap an electronics or furniture item. The standard exchange fee of $10 would be waived for you, making the exchange process free of charge.
+**CG-unstructured (454 tokens, 415+39, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> To determine if the exchange fee would be waived, I need to know your current loyalty status. If you're a Gold member, the exchange fee would be waived for electronics and furniture exchanges.
 Context-extraction layer retrieved:
   - (sim=0.703) "If a customer would rather swap an electronics item for something else instead of getting a refund, ..."
   - (sim=0.702) "Gold members get their exchange fee waived -- that's the $10 fee mentioned above for both Electronic..."
@@ -107,30 +99,28 @@ Context-extraction layer retrieved:
 **Expected:** Platinum only.
 **Why (grounding):** only tier:platinum -waives-> fee:restocking_fee_waiver.
 
-**KG-unstructured (176 tokens, 110+66):**
-> According to our loyalty program policy, the following tiers get the restocking fee waived completely:
+**KG-unstructured (129 tokens, 110+19):**
+> According to our loyalty program policy, only Platinum members have their restocking fee waived completely.
 
-* Platinum members (Tier 3) and above
-
-Please note that this information is accurate as of our last policy update on March 15, 2022. If you have any further questions or concerns, feel free to ask!
-
-**CG-unstructured (316 tokens, 293+23, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to the policy, the Platinum loyalty tier is the only one that gets the restocking fee waived completely.
+**CG-unstructured (310 tokens, 293+17, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> According to our policy, only Platinum members get the restocking fee waived completely.
 Context-extraction layer retrieved:
   - (sim=0.820) ""Does my loyalty tier ever cover a restocking fee?" -- Only if you're Platinum. Gold covers exchange..."
   - (sim=0.778) "Only Platinum members get the restocking fee waived. Platinum also covers the exchange fee waiver to..."
-  - (sim=0.774) "We've got four loyalty tiers: Bronze, Silver, Gold, and Platinum, in ascending order of benefits. Br..."
+  - (sim=0.775) "We've got four loyalty tiers: Bronze, Silver, Gold, and Platinum, in ascending order of benefits. Br..."
 
 ## D8 (direct, leak_free=True)
 **Query:** keep seeing this extended warranty thing pop up when i checkout -- how much is it and what does it even cover
 **Expected:** $25; covers defect and damage claims beyond the manufacturer warranty period.
 **Why (grounding):** product:extended_warranty cost_usd=25, attrs.covers.
 
-**KG-unstructured (295 tokens, 275+20):**
-> According to our policy, the Extended Warranty costs $25 and covers both Electronics and Furniture products.
+**KG-unstructured (170 tokens, 110+60):**
+> Our Extended Warranty program is available for purchase at checkout. The cost is $99.99 for a 2-year warranty and $149.99 for a 3-year warranty. 
 
-**CG-unstructured (437 tokens, 391+46, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to our policy, the Extended Warranty costs $25 and covers defects and damage claims for Electronics and Furniture products. It's a one-time add-on that you can purchase at checkout, and it's tied to the order.
+The Extended Warranty covers repairs or replacements for defects in materials and workmanship for the duration of the warranty period.
+
+**CG-unstructured (271 tokens, 225+46, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> The Extended Warranty is a one-time add-on that costs $25. It's available at checkout. According to our policy, it covers defect and damage claims for Electronics and Furniture, beyond what the manufacturer's own warranty covers.
 Context-extraction layer retrieved:
   - (sim=0.779) "Customers can add the Extended Warranty for $25 at checkout, as a one-time add-on tied to the order...."
   - (sim=0.726) ""Does the warranty cover a pair of jeans?" -- No, the extended warranty only covers Electronics and ..."
@@ -142,11 +132,11 @@ Context-extraction layer retrieved:
 **Why (grounding):** direct recall of the stored warranty.status=declined trace.
 - Seed: "I already declined the extended warranty." -> Stored: warranty.status = declined
 
-**KG-unstructured (318 tokens, 276+42):**
-> According to the policy facts, the Extended Warranty covers both Electronics and Furniture. Since the product category of the item you're inquiring about is Electronics, I can confirm that the Extended Warranty does cover it.
+**KG-unstructured (139 tokens, 111+28):**
+> I'd be happy to help you check on that. According to our records, you did not add the extended warranty to your order.
 
-**CG-unstructured (495 tokens, 467+28):**
-> According to the evidence provided, the warranty status is "declined". This means you did not add the Extended Warranty to your order.
+**CG-unstructured (539 tokens, 520+19):**
+> I don't have information on whether you added the Extended Warranty to your order or not.
 Context-extraction layer retrieved:
   - (sim=0.742) "Customers can add the Extended Warranty for $25 at checkout, as a one-time add-on tied to the order...."
   - (sim=0.673) "Section 5: Extended Warranty..."
@@ -157,22 +147,14 @@ Context-extraction layer retrieved:
 **Expected:** Yes, $10 fee.
 **Why (grounding):** rule:exchange_standard: allowed=True, fee_usd=10.
 
-**KG-unstructured (444 tokens, 342+102):**
-> According to our policy, you can exchange your electronics item for a different model. However, since you're not a Platinum loyalty tier member, you'll be subject to our Standard Exchange policy.
+**KG-unstructured (357 tokens, 329+28):**
+> According to our policy, you can exchange your electronics item under our Standard Exchange Rule. However, there is a fee of $10.
 
-The Standard Exchange policy has a fee of $10. This fee is waived for Platinum loyalty tier members, but since you're not a Platinum member, you'll need to pay the $10 fee.
-
-Please note that you'll also need to return the original item in its original condition and packaging to complete the exchange.
-
-**CG-unstructured (757 tokens, 651+106, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to the policy, you can swap your electronics item for a different model, which is allowed under the Standard Exchange Rule. The standard exchange fee for electronics is $10.
-
-However, since you didn't specify your loyalty tier, I'll assume you're not a Platinum or Gold member. As a non-tiered member, you would need to pay the standard exchange fee of $10.
-
-Please note that if you were a Platinum or Gold member, you would be exempt from the Standard Exchange fee, as per the policy.
+**CG-unstructured (662 tokens, 638+24, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> Yes, you can swap your electronics item for a different model. The standard exchange fee for electronics is $10.
 Context-extraction layer retrieved:
   - (sim=0.684) "If a customer would rather swap an electronics item for something else instead of getting a refund, ..."
-  - (sim=0.591) "A Gold-tier member buys a $300 television (Electronics) in October, outside any blackout window, and..."
+  - (sim=0.592) "A Gold-tier member buys a $300 television (Electronics) in October, outside any blackout window, and..."
   - (sim=0.571) "Electronics can be sent back within 30 days of delivery, though we do charge a $15 restocking fee to..."
 
 ## D11 (direct, leak_free=True)
@@ -180,14 +162,14 @@ Context-extraction layer retrieved:
 **Expected:** Nov 25 - Dec 5, restricts Electronics.
 **Why (grounding):** blackout:holiday_sale attrs.dates + restricts edge to product_category:electronics.
 
-**KG-unstructured (442 tokens, 405+37):**
-> According to the policy graph, the "Holiday Sale Blackout" is from November 25th to December 5th. It restricts the "Electronics" product category.
+**KG-unstructured (135 tokens, 103+32):**
+> According to our policy, the holiday sale blackout period is from November 20th to December 1st. It affects the Electronics and Home Appliances categories.
 
-**CG-unstructured (650 tokens, 621+29, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to the policy, the Holiday Sale Blackout runs from November 25th to December 5th and applies to the Electronics category.
+**CG-unstructured (342 tokens, 318+24, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> The Holiday Sale Blackout runs from November 25th through December 5th and applies to the Electronics category.
 Context-extraction layer retrieved:
   - (sim=0.791) "The Holiday Sale Blackout runs November 25th through December 5th and applies to Electronics -- purc..."
-  - (sim=0.703) "Separately, there's the Clearance Event Blackout from January 2nd to January 15th, which restricts A..."
+  - (sim=0.704) "Separately, there's the Clearance Event Blackout from January 2nd to January 15th, which restricts A..."
   - (sim=0.694) "We run two blackout windows a year where certain returns get more restrictive than the normal catego..."
 
 ## D12 (direct, leak_free=True)
@@ -196,11 +178,11 @@ Context-extraction layer retrieved:
 **Why (grounding):** tier:platinum -waives-> fee:restocking_fee_waiver -applies_to-> rule:return_electronics.
 - Seed: "I am a Platinum member." -> Stored: loyalty_tier.tier = Platinum
 
-**KG-unstructured (379 tokens, 341+38):**
-> As a Platinum member, you are exempt from the Standard Exchange policy, which includes the restocking fee. Therefore, your restocking fee would be waived if you return an electronics item.
+**KG-unstructured (376 tokens, 328+48):**
+> As a Platinum member, you are exempt from the Holiday Sale Blackout, but that doesn't directly affect the restocking fee. However, I don't have information on whether your loyalty tier affects the restocking fee for electronics returns.
 
-**CG-unstructured (842 tokens, 818+24):**
-> As a Platinum member, you are exempt from the Return Electronics policy, which includes the $15 restocking fee.
+**CG-unstructured (689 tokens, 616+73, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> As a Gold member, you are exempt from the Holiday Sale Blackout, but that doesn't affect the restocking fee. According to our policy, Gold members get their exchange fee waived, but the restocking fee is not waived for returns. So, if you return an electronics item, you would still be responsible for paying the $15 restocking fee.
 Context-extraction layer retrieved:
   - (sim=0.781) "Gold members get their exchange fee waived -- that's the $10 fee mentioned above for both Electronic..."
   - (sim=0.739) "Electronics can be sent back within 30 days of delivery, though we do charge a $15 restocking fee to..."
@@ -211,11 +193,11 @@ Context-extraction layer retrieved:
 **Expected:** No, exchanges aren't allowed for Groceries at all.
 **Why (grounding):** rule:exchange_none for groceries: allowed=False.
 
-**KG-unstructured (205 tokens, 105+100):**
-> According to our store's policy, you can exchange a groceries order for a different item or a store credit, but only if the item is in its original packaging and is returned within 7 days of delivery. There is no fee for exchanging a groceries order, but if you want to exchange it for a higher-priced item, you'll need to pay the difference in price. If you want to exchange it for a lower-priced item, you'll receive a store credit for the difference in price.
+**KG-unstructured (177 tokens, 105+72):**
+> According to our policy, exchanges are only available for orders that are defective or damaged. If you'd like to exchange a grocery order, you'll need to contact our customer support team within 3 days of delivery and provide proof of the issue. We'll then assist you in returning the item and replacing it with a new one of equal or greater value.
 
-**CG-unstructured (360 tokens, 317+43, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to our policy, Groceries are non-returnable and non-exchangeable. This means that we do not support exchanges for Groceries, and you will not be able to exchange a Groceries order.
+**CG-unstructured (346 tokens, 317+29, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> No, exchanges are not an option for Groceries. According to our policy, Groceries are non-returnable and non-exchangeable.
 Context-extraction layer retrieved:
   - (sim=0.721) "Groceries and Digital Goods are both non-returnable, full stop, no exceptions, and support reps shou..."
   - (sim=0.706) "As covered above, Groceries and Digital Goods support neither returns nor exchanges. There is no exc..."
@@ -226,13 +208,13 @@ Context-extraction layer retrieved:
 **Expected:** Jan 2 - Jan 15.
 **Why (grounding):** blackout:clearance_event attrs.dates.
 
-**KG-unstructured (376 tokens, 353+23):**
-> According to the policy, the Clearance Event Blackout dates are January 2nd to January 15th.
+**KG-unstructured (111 tokens, 103+8):**
+> I don't have that information.
 
-**CG-unstructured (599 tokens, 576+23, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to the policy, the Clearance Event Blackout dates are January 2nd to January 15th.
+**CG-unstructured (343 tokens, 325+18, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> The Clearance Event Blackout dates are January 2nd to January 15th.
 Context-extraction layer retrieved:
-  - (sim=0.663) "Separately, there's the Clearance Event Blackout from January 2nd to January 15th, which restricts A..."
+  - (sim=0.662) "Separately, there's the Clearance Event Blackout from January 2nd to January 15th, which restricts A..."
   - (sim=0.661) ""What about returning apparel bought during the January clearance sale?" -- Only Platinum members ke..."
   - (sim=0.618) "The Holiday Sale Blackout runs November 25th through December 5th and applies to Electronics -- purc..."
 
@@ -242,11 +224,11 @@ Context-extraction layer retrieved:
 **Why (grounding):** product_category:furniture -> rule:exchange_standard, fee_usd=10.
 - Seed: "I bought Furniture on my last order." -> Stored: product.category = Furniture
 
-**KG-unstructured (155 tokens, 107+48):**
-> I'm happy to help! According to our store's policy, the exchange fee for returning or exchanging an item is 10% of the original purchase price, with a minimum fee of $5 and a maximum fee of $20.
+**KG-unstructured (115 tokens, 107+8):**
+> I don't have that information.
 
-**CG-unstructured (456 tokens, 416+40, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> Since you didn't specify what you ordered, I'll assume you're asking about the exchange fee in general. According to our policy, the standard exchange fee for electronics and furniture is $10.
+**CG-unstructured (498 tokens, 416+82, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> I'd need to know what type of item you're referring to and whether you're a Gold-tier member. If you're exchanging an electronics item and you're not a Gold-tier member, the exchange fee is $10. If you're a Gold-tier member, the exchange fee is waived. If you're exchanging a furniture item, the exchange fee is also $10, regardless of your tier status.
 Context-extraction layer retrieved:
   - (sim=0.753) "If a customer would rather swap an electronics item for something else instead of getting a refund, ..."
   - (sim=0.692) "A Gold-tier member buys a $300 television (Electronics) in October, outside any blackout window, and..."
@@ -257,15 +239,15 @@ Context-extraction layer retrieved:
 **Expected:** Gold and Platinum.
 **Why (grounding):** tier:gold and tier:platinum both -exempt_from-> blackout:holiday_sale.
 
-**KG-unstructured (421 tokens, 402+19):**
-> According to the policy graph, the Platinum tier is exempt from the Holiday Sale Blackout.
+**KG-unstructured (108 tokens, 100+8):**
+> I don't have that information.
 
-**CG-unstructured (636 tokens, 618+18, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to the policy, the Platinum tier is exempt from the Holiday Sale Blackout.
+**CG-unstructured (329 tokens, 315+14, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> Gold and Platinum members are exempt from the Holiday Sale Blackout.
 Context-extraction layer retrieved:
   - (sim=0.730) "The Holiday Sale Blackout runs November 25th through December 5th and applies to Electronics -- purc..."
-  - (sim=0.693) "We run two blackout windows a year where certain returns get more restrictive than the normal catego..."
-  - (sim=0.671) "Separately, there's the Clearance Event Blackout from January 2nd to January 15th, which restricts A..."
+  - (sim=0.692) "We run two blackout windows a year where certain returns get more restrictive than the normal catego..."
+  - (sim=0.672) "Separately, there's the Clearance Event Blackout from January 2nd to January 15th, which restricts A..."
 
 ## D17 (direct, leak_free=True)
 **Query:** so i think i paid extra for protection on this order -- if my furniture item shows up busted does that cover the return fee
@@ -273,15 +255,13 @@ Context-extraction layer retrieved:
 **Why (grounding):** product:extended_warranty -covers-> rule:return_furniture; warranty=purchased trace.
 - Seed: "I already purchased the extended warranty." -> Stored: warranty.status = purchased
 
-**KG-unstructured (344 tokens, 269+75):**
-> According to the policy, you purchased the "Extended Warranty" which covers both "Electronics" and "Furniture". Since the item you're returning is "Furniture", the Extended Warranty should cover it.
+**KG-unstructured (327 tokens, 256+71):**
+> You paid extra for protection, which is the Extended Warranty. According to the policy, the Extended Warranty covers "defect and damage claims beyond manufacturer's warranty". If your furniture item shows up busted, you may be eligible for a return under the Return Furniture policy. However, I don't have information on whether the Extended Warranty covers the return fee.
 
-As a Platinum loyalty tier member, you're exempt from the Return Furniture fee, which is $50. So, you won't be charged the return fee.
-
-**CG-unstructured (670 tokens, 635+35):**
-> According to the policy, you purchased the Extended Warranty, which covers both Electronics and Furniture. Since your furniture item arrived damaged, the Extended Warranty should cover the return fee.
+**CG-unstructured (658 tokens, 622+36):**
+> You have purchased the Extended Warranty, which covers defect and damage claims beyond the manufacturer's warranty. However, I don't have information on whether this warranty covers the return fee.
 Context-extraction layer retrieved:
-  - (sim=0.643) "Furniture works a little differently. You've got a shorter window here, just 14 days, and the restoc..."
+  - (sim=0.642) "Furniture works a little differently. You've got a shorter window here, just 14 days, and the restoc..."
   - (sim=0.635) ""Can I return groceries if they arrived damaged?" -- Groceries are non-returnable under this policy ..."
   - (sim=0.630) "Gold members get their exchange fee waived -- that's the $10 fee mentioned above for both Electronic..."
 
@@ -291,17 +271,15 @@ Context-extraction layer retrieved:
 **Why (grounding):** tier:gold has only one waives edge (exchange_fee_waiver); restocking_fee_waiver is waived only by tier:platinum.
 - Seed: "I am a Gold tier member." -> Stored: loyalty_tier.tier = Gold
 
-**KG-unstructured (197 tokens, 127+70):**
-> According to our policy, the top-tier customers do receive waived restocking fees. However, to qualify for this perk, you would need to be a Platinum member, which requires a minimum annual spend of $10,000.
+**KG-unstructured (189 tokens, 127+62):**
+> According to our policy, the top tier (Elite Tier) does receive waived restocking fees. However, I don't have information on the specific requirements or benefits for each tier. To determine your current tier and associated benefits, I recommend checking your account details or contacting our customer service team for more information.
 
-If you're not a Platinum member, the restocking fee remains at 10% of the item's original price.
-
-**CG-unstructured (316 tokens, 283+33, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to our policy, if you're not a Platinum member, your restocking fee will not be waived. Only Platinum members get their restocking fee waived.
+**CG-unstructured (310 tokens, 283+27, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> According to our policy, your restocking fee will not be waived. You'll be responsible for paying the full restocking fee.
 Context-extraction layer retrieved:
   - (sim=0.763) ""Does my loyalty tier ever cover a restocking fee?" -- Only if you're Platinum. Gold covers exchange..."
-  - (sim=0.735) "Only Platinum members get the restocking fee waived. Platinum also covers the exchange fee waiver to..."
-  - (sim=0.719) ""I'm Silver tier, do I get any fee breaks?" -- No, Bronze and Silver have identical fee treatment: f..."
+  - (sim=0.736) "Only Platinum members get the restocking fee waived. Platinum also covers the exchange fee waiver to..."
+  - (sim=0.720) ""I'm Silver tier, do I get any fee breaks?" -- No, Bronze and Silver have identical fee treatment: f..."
 
 ## R2 (reasoning, leak_free=True)
 **Query:** so this is landing smack in the middle of the clearance period, does my status get me around that or is that exemption only for a different blackout
@@ -309,11 +287,11 @@ Context-extraction layer retrieved:
 **Why (grounding):** tier:gold -exempt_from-> holiday_sale only; tier:platinum -exempt_from-> both.
 - Seed: "I am a Gold tier member." -> Stored: loyalty_tier.tier = Gold
 
-**KG-unstructured (167 tokens, 117+50):**
-> According to our policy, the clearance period exemption is only applicable to our loyalty program members who have reached the "Elite" tier. Since you didn't specify your loyalty program status, I'm unable to determine if you're eligible for the exemption.
+**KG-unstructured (142 tokens, 117+25):**
+> I don't have information on whether your status affects the clearance period or if there's a different blackout period for exemptions.
 
-**CG-unstructured (394 tokens, 332+62, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to the policy, the Clearance Event Blackout restricts Apparel returns from January 2nd to January 15th, and only Platinum members are exempt from this blackout. Since you are a Platinum member, you are exempt from the Clearance Event Blackout and can return Apparel purchases made during this period.
+**CG-unstructured (384 tokens, 332+52, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> You are a Platinum member. According to the policy, Platinum members are exempt from the Clearance Event Blackout, which restricts Apparel returns from January 2nd to January 15th. So, yes, your status will get you around that blackout.
 Context-extraction layer retrieved:
   - (sim=0.693) "Separately, there's the Clearance Event Blackout from January 2nd to January 15th, which restricts A..."
   - (sim=0.657) "The Holiday Sale Blackout runs November 25th through December 5th and applies to Electronics -- purc..."
@@ -325,15 +303,11 @@ Context-extraction layer retrieved:
 **Why (grounding):** product:extended_warranty covers only rule:return_electronics and rule:return_furniture.
 - Seed: "I already purchased the extended warranty." -> Stored: warranty.status = purchased
 
-**KG-unstructured (222 tokens, 123+99):**
-> According to our policy, Protection Coverage only applies to eligible items, which are specifically listed in the policy details. If you're returning apparel and it's not listed as an eligible item, then Protection Coverage would not apply.
+**KG-unstructured (156 tokens, 123+33):**
+> According to our policy, Protection Coverage applies to eligible items, but it does not cover apparel. If you're returning apparel, the Protection Coverage would not apply.
 
-To confirm, please check your order details or contact our customer service team to verify if the item is eligible for Protection Coverage. If it's not, you can proceed with the return process according to our standard return policy, which does not include any additional fees or penalties.
-
-**CG-unstructured (389 tokens, 290+99, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to our policy, protection coverage only applies to Electronics and Furniture purchases. Since you're unsure if you have protection coverage on this order, I'd need to verify that information. If you do have protection coverage, it would only apply to Electronics and Furniture, not Apparel.
-
-If you're returning Apparel, our return policy for that category would apply. As mentioned in our policy, you have 45 days to send things back, and there's no fee for returns in the Apparel category.
+**CG-unstructured (339 tokens, 290+49, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> Since you're returning apparel, our policy is that there's no fee for returns in this category, and you have 45 days to send it back. This applies to all apparel purchases, regardless of whether you have protection coverage or not.
 Context-extraction layer retrieved:
   - (sim=0.670) "Coverage is limited to Electronics and Furniture purchases only. It doesn't apply to Apparel, Grocer..."
   - (sim=0.645) "Apparel is the most forgiving category by a wide margin. You get a generous 45 days to send things b..."
@@ -344,21 +318,11 @@ Context-extraction layer retrieved:
 **Expected:** Nothing helps -- Groceries has no connection to any waiver or warranty; it's simply non-returnable regardless of tier or coverage.
 **Why (grounding):** no tier or warranty edge touches rule:return_groceries anywhere in the schema.
 
-**KG-unstructured (322 tokens, 122+200):**
-> According to our store's policy, if a customer's groceries order shows up and they want a refund, we have a "Grocery Order Protection" policy that may be able to assist them.
+**KG-unstructured (203 tokens, 122+81):**
+> According to our policy, if a customer's groceries order shows up and they want a refund, they may be eligible for a refund or exchange under our "Order Protection" policy. This policy provides a 3-day window for customers to report any issues with their order, including damage or incorrect items. If the issue is reported within this timeframe, we will work with the customer to resolve the issue.
 
-Here are the details:
-
-* If the order is incomplete or contains incorrect items, we will provide a full refund or replace the incorrect items at no additional cost to the customer.
-* If the order is damaged or spoiled during transit, we will provide a full refund or replace the damaged items at no additional cost to the customer.
-* If the customer is not satisfied with the order for any reason, we offer a 100% satisfaction guarantee. If the customer is not satisfied, we will work with them to resolve the issue and provide a full or partial refund, if necessary.
-
-Please note that our Grocery Order Protection policy only applies to orders that are delivered to the customer's doorstep. If the order is picked up at our store, our standard return and exchange policies apply.
-
-I hope this information helps!
-
-**CG-unstructured (427 tokens, 357+70, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to the policy, groceries are non-returnable regardless of condition. In cases where groceries arrive damaged, the policy directs you to route the issue to the shipping-carrier claims process, which is a separate workflow from the return policy. There is no provision for a refund or any other form of assistance for groceries. It's a hard no.
+**CG-unstructured (401 tokens, 357+44, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> Unfortunately, it's a hard no. According to our policy, groceries are non-returnable, regardless of condition. If they arrived damaged, you should contact the shipping carrier to file a claim through their claims process.
 Context-extraction layer retrieved:
   - (sim=0.726) ""Can I return groceries if they arrived damaged?" -- Groceries are non-returnable under this policy ..."
   - (sim=0.677) "Groceries and Digital Goods are both non-returnable, full stop, no exceptions, and support reps shou..."
@@ -370,13 +334,11 @@ Context-extraction layer retrieved:
 **Why (grounding):** blackout:holiday_sale -restricts-> electronics; tier:platinum -exempt_from-> holiday_sale.
 - Seed: "I am a Platinum member." -> Stored: loyalty_tier.tier = Platinum
 
-**KG-unstructured (534 tokens, 441+93):**
-> According to the policy, you are a Platinum member, which means you are exempt from the Holiday Sale Blackout. This means you can order electronics during the Holiday Sale without any restrictions.
+**KG-unstructured (391 tokens, 332+59):**
+> Based on the policy, as a Platinum loyalty tier member, you are exempt from the Holiday Sale Blackout, which means you can order electronics during the sale period. However, I don't have information on any additional seasonal return policies that might affect your ability to return electronics after the sale.
 
-However, please note that the Return Electronics policy still applies, which has a 30-day window and a $15 fee. If you need to return an electronic item, you can do so within the 30-day window, but you will be charged a $15 fee.
-
-**CG-unstructured (809 tokens, 742+67):**
-> According to the policy, as a Platinum member, you are exempt from the Holiday Sale Blackout, which means you can still order electronics during that period without any issues. Additionally, as a Platinum member, you are also exempt from the normal 30-day electronics return window, so you can return your electronics purchase at any time.
+**CG-unstructured (577 tokens, 540+37, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> Based on the policy, as a Platinum member, you are exempt from the Holiday Sale Blackout, which means you can still make a purchase during that time and return it later.
 Context-extraction layer retrieved:
   - (sim=0.749) "The Holiday Sale Blackout runs November 25th through December 5th and applies to Electronics -- purc..."
   - (sim=0.734) ""If I bought electronics during the Black Friday sale, can I still return it?" -- Only if you're Gol..."
@@ -388,14 +350,14 @@ Context-extraction layer retrieved:
 **Why (grounding):** tier:bronze has no waives edges anywhere.
 - Seed: "I am a Bronze member." -> Stored: loyalty_tier.tier = Bronze
 
-**KG-unstructured (162 tokens, 111+51):**
-> According to our policies, the exchange fee waiver is only applicable for Tier 1 customers, and the restocking fee waiver is only applicable for Tier 3 customers. If you end up in a different tier, neither of these waivers would be applicable.
+**KG-unstructured (317 tokens, 262+55):**
+> Based on our policy, if you're a Platinum member, you'll get both the Exchange Fee Waiver and the Restocking Fee Waiver. If you're a Gold member, you'll get the Exchange Fee Waiver, but not the Restocking Fee Waiver.
 
-**CG-unstructured (393 tokens, 335+58, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to our policy, if you're a Gold member, you'll get the exchange fee waiver, but not the restocking fee waiver. If you're a Platinum member, you'll get both the exchange fee waiver and the restocking fee waiver, on both Electronics and Furniture categories.
+**CG-unstructured (635 tokens, 570+65):**
+> Based on our policy, if you're a Platinum member, you'll get both the exchange fee waiver and the restocking fee waiver. If you're a Gold member, you'll get the exchange fee waiver, but not the restocking fee waiver. If you're a Bronze member, you won't get either waiver.
 Context-extraction layer retrieved:
-  - (sim=0.766) ""Does my loyalty tier ever cover a restocking fee?" -- Only if you're Platinum. Gold covers exchange..."
-  - (sim=0.752) "Only Platinum members get the restocking fee waived. Platinum also covers the exchange fee waiver to..."
+  - (sim=0.767) ""Does my loyalty tier ever cover a restocking fee?" -- Only if you're Platinum. Gold covers exchange..."
+  - (sim=0.751) "Only Platinum members get the restocking fee waived. Platinum also covers the exchange fee waiver to..."
   - (sim=0.718) "A Gold-tier member buys a $300 television (Electronics) in October, outside any blackout window, and..."
 
 ## R7 (reasoning, leak_free=True)
@@ -403,19 +365,15 @@ Context-extraction layer retrieved:
 **Expected:** Two different rules -- the Furniture Return Rule ($50) and the Standard Exchange Rule ($10) -- not one combined 'change your mind' fee.
 **Why (grounding):** rule:return_furniture and rule:exchange_standard are distinct nodes with different fees.
 
-**KG-unstructured (419 tokens, 271+148):**
-> According to the ReturnRule 'Return Furniture' policy, the fee is $50. Additionally, the ExchangeRule 'Standard Exchange' policy has a fee of $10.
+**KG-unstructured (340 tokens, 258+82):**
+> According to our return policy, if someone buys furniture and wants to return it, there is a $50 fee (ReturnRule 'Return Furniture').
 
-Since the customer is a Platinum member, they are exempt from the Standard Exchange fee (due to the relationship Platinum --exempt_from--> Standard Exchange).
+If they also want to exchange it, there is a separate exchange fee of $10 (ExchangeRule 'Standard Exchange Rule').
 
-However, the customer still needs to initiate a return and then exchange the furniture. In this case, they would need to pay the $50 return fee for the furniture, and then, since they're not exempt from the Standard Exchange fee, they would need to pay the $10 exchange fee.
+So, in this case, there would be two separate fees: $50 for the return and $10 for the exchange.
 
-So, in total, the customer would need to pay $60: $50 return fee + $10 exchange fee.
-
-**CG-unstructured (636 tokens, 530+106, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to the policy, if a customer wants to return and then exchange the furniture, it would be considered two separate transactions. The return would follow the "Return Furniture" rule, which has a fee of $50. After the return, the customer could then exchange the item for something else, which would also follow the "Standard Exchange" rule, with a fee of $10.
-
-So, in this scenario, the customer would pay a total of $60: $50 for the return and $10 for the exchange.
+**CG-unstructured (591 tokens, 517+74, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> According to our policy, if a customer wants to return furniture and then exchange it for a different item, they would be subject to two separate fees: the $50 return fee (as per the Return Furniture policy) and the $10 exchange fee (as per the Standard Exchange Rule, which applies to Furniture). These are two distinct fees, not the same fee.
 Context-extraction layer retrieved:
   - (sim=0.801) "If a customer would rather swap an electronics item for something else instead of getting a refund, ..."
   - (sim=0.720) "A Gold-tier member buys a $300 television (Electronics) in October, outside any blackout window, and..."
@@ -427,30 +385,23 @@ Context-extraction layer retrieved:
 **Why (grounding):** warranty=declined trace; product:extended_warranty covers rule:return_electronics.
 - Seed: "I already declined the extended warranty." -> Stored: warranty.status = declined
 
-**KG-unstructured (521 tokens, 349+172):**
-> According to the policy, the product category for this electronics order is 'Electronics', which falls under the 'Return Electronics' return policy. This policy has a fee of $15 and a 30-day window.
+**KG-unstructured (451 tokens, 336+115):**
+> According to our policy, if your electronics item breaks, you would be subject to our Standard Exchange Rule. This rule has a fee of $10 USD.
 
-If you didn't add extra coverage to this electronics order, and it breaks, you would be subject to the 'Return Electronics' return policy, which includes a $15 fee.
+The Extended Warranty, which covers defect and damage claims beyond the manufacturer's warranty, is available for purchase for electronics items. However, if you didn't add this extra coverage to your order, the $10 USD fee from the Standard Exchange Rule would still apply.
 
-If you did add extra coverage to this electronics order, specifically the 'Extended Warranty' which covers 'Electronics', the outcome would be the same. The 'Extended Warranty' would cover the electronics, but the 'Return Electronics' return policy would still apply, including the $15 fee.
+So, in either case, you would be responsible for paying the $10 USD fee if you need to exchange the item due to a defect or damage.
 
-In either case, you would be responsible for the $15 fee. The 'Extended Warranty' would provide additional coverage, but it would not waive the return policy fee.
+**CG-unstructured (770 tokens, 607+163):**
+> According to our policy, the Extended Warranty is a one-time add-on that can be purchased for $25 at checkout. If you did add the Extended Warranty to your order, it would cover defect and damage claims beyond the manufacturer's warranty.
 
-**CG-unstructured (808 tokens, 620+188):**
-> According to the policy, the Extended Warranty covers Electronics and Furniture purchases. Since you're unsure if you added the warranty to your Electronics order, let's consider both scenarios:
+If you didn't add the Extended Warranty, you would be covered by the manufacturer's warranty, and any claims would be handled according to their terms.
 
-1. If you did add the Extended Warranty to your Electronics order:
-	* You would have paid $25 for the Extended Warranty.
-	* If the electronics breaks, you would be covered by the Extended Warranty, which would provide additional protection beyond the manufacturer's warranty.
-2. If you did not add the Extended Warranty to your Electronics order:
-	* You would not have paid for the Extended Warranty.
-	* If the electronics breaks, you would be covered by the manufacturer's warranty, and if the manufacturer's warranty has lapsed or excludes the type of damage, you would not have any additional coverage.
-
-In either case, the cost of repairing or replacing the electronics would be the same, as the Extended Warranty only provides additional coverage beyond the manufacturer's warranty.
+In either case, if the item breaks, you would need to contact our customer support to initiate a claim. If you added the Extended Warranty, you would be responsible for the $25 cost of the warranty, in addition to any other applicable fees. If you didn't add the Extended Warranty, you would not be responsible for the $25 fee, but you would still need to follow the manufacturer's warranty claims process.
 Context-extraction layer retrieved:
   - (sim=0.687) "Coverage is limited to Electronics and Furniture purchases only. It doesn't apply to Apparel, Grocer..."
   - (sim=0.663) "Customers can add the Extended Warranty for $25 at checkout, as a one-time add-on tied to the order...."
-  - (sim=0.601) ""Does the warranty cover a pair of jeans?" -- No, the extended warranty only covers Electronics and ..."
+  - (sim=0.602) ""Does the warranty cover a pair of jeans?" -- No, the extended warranty only covers Electronics and ..."
 
 ## R9 (reasoning, leak_free=True)
 **Query:** thinking about exchanging an apparel item later, given my account status should i expect to pay anything or does tier not even matter here
@@ -458,31 +409,26 @@ Context-extraction layer retrieved:
 **Why (grounding):** rule:exchange_free (Apparel) is already fee_usd=0, independent of any tier waiver.
 - Seed: "I am a Gold tier member." -> Stored: loyalty_tier.tier = Gold
 
-**KG-unstructured (165 tokens, 113+52):**
-> According to our policy, as a valued customer with an active account, you are eligible for a complimentary exchange on apparel items within 30 days of purchase. Tier status does not affect this policy, and you will not be charged any fees for the exchange.
+**KG-unstructured (143 tokens, 113+30):**
+> According to our policy, tier does not affect the exchange process for apparel items. You will not be charged a fee for exchanging an apparel item.
 
-**CG-unstructured (334 tokens, 266+68, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> As a Platinum loyalty tier member, you're in luck! According to our policy, Platinum tier members don't pay restocking fees, and since you're exchanging an apparel item, you won't be charged a fee. The Free Exchange Rule applies specifically to clothing, so you can exchange your apparel item without incurring any additional costs.
+**CG-unstructured (321 tokens, 266+55, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> As a Platinum loyalty tier member, you are eligible for free restocking fees on exchanges, but since you're exchanging an apparel item, the Free Exchange Rule applies. So, in this case, tier doesn't matter, and you won't pay anything for the exchange.
 Context-extraction layer retrieved:
   - (sim=0.638) ""Does my loyalty tier ever cover a restocking fee?" -- Only if you're Platinum. Gold covers exchange..."
   - (sim=0.638) "Apparel is the most forgiving category by a wide margin. You get a generous 45 days to send things b..."
-  - (sim=0.634) "Apparel exchanges are free -- we call this the Free Exchange Rule internally, and it applies specifi..."
+  - (sim=0.635) "Apparel exchanges are free -- we call this the Free Exchange Rule internally, and it applies specifi..."
 
 ## R10 (reasoning, leak_free=True)
 **Query:** ok weird question but looking at both blackout periods, is there a tier that AINT fully exempt from at least one of em
 **Expected:** Yes -- Bronze, Silver, and Gold are all not exempt from at least one blackout (Bronze/Silver from both, Gold specifically from Clearance Event); only Platinum is exempt from both.
 **Why (grounding):** tier:bronze/silver: no exempt_from edges. tier:gold: holiday_sale only. tier:platinum: both.
 
-**KG-unstructured (207 tokens, 113+94):**
-> According to our policies, the blackout periods are:
+**KG-unstructured (159 tokens, 113+46):**
+> According to our policy, Tier 3 is not fully exempt from the winter blackout period (December 15 - January 15), but it is fully exempt from the summer blackout period (June 20 - August 20).
 
-* January 1st to January 31st: All tiers are fully exempt.
-* July 1st to July 31st: Tier 1 is fully exempt, Tier 2 is partially exempt (50% off), and Tier 3 is not exempt.
-
-After reviewing the policies, I found that Tier 2 is partially exempt from the July blackout period, but fully exempt from the January blackout period.
-
-**CG-unstructured (323 tokens, 302+21, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to the policy, Gold members are exempt from the Electronics blackout, but NOT the Apparel blackout.
+**CG-unstructured (317 tokens, 302+15, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> Yes, Bronze and Silver tiers are fully exempt from neither blackout period.
 Context-extraction layer retrieved:
   - (sim=0.735) "We run two blackout windows a year where certain returns get more restrictive than the normal catego..."
   - (sim=0.678) ""I'm Silver tier, do I get any fee breaks?" -- No, Bronze and Silver have identical fee treatment: f..."
@@ -494,19 +440,15 @@ Context-extraction layer retrieved:
 **Why (grounding):** rule:exchange_none for groceries: allowed=False; no tier edge touches it.
 - Seed: "I am a Platinum member." -> Stored: loyalty_tier.tier = Platinum
 
-**KG-unstructured (268 tokens, 113+155):**
-> According to our store's policy, the ability to exchange a groceries item depends on your loyalty program status. As a loyalty program member, you have access to our "Preferred Tier" which allows for exchanges on most items, including groceries. However, please note that some exclusions may apply, and certain items may not be eligible for exchange.
+**KG-unstructured (157 tokens, 113+44):**
+> According to our policy, you can exchange a groceries item if you have a "Preferred" or "Elite" status. If you have a "Basic" status, you can only return the item for a refund.
 
-As a reminder, our Preferred Tier is available to members who have reached a minimum of 500 points within a calendar year. If you're unsure about your current status or points balance, please feel free to check your loyalty program account or visit our customer service desk for assistance.
-
-In this case, since you're a loyalty program member, you should be able to exchange the groceries item as long as it meets our exchange policy requirements.
-
-**CG-unstructured (396 tokens, 325+71, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to our policy, Groceries are non-returnable and non-exchangeable, regardless of your status or any other circumstances. This means that you cannot exchange a Groceries item, even if you're a loyal customer or have a high-tier status. The policy is clear: once Groceries leave our warehouse, they cannot be returned or exchanged.
+**CG-unstructured (372 tokens, 325+47, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> Unfortunately, groceries are non-returnable and non-exchangeable, regardless of your status or the condition of the item. According to our policy, groceries can't be exchanged or returned, so this option isn't available for you.
 Context-extraction layer retrieved:
   - (sim=0.727) "Groceries and Digital Goods are both non-returnable, full stop, no exceptions, and support reps shou..."
-  - (sim=0.700) "As covered above, Groceries and Digital Goods support neither returns nor exchanges. There is no exc..."
-  - (sim=0.691) ""Can I return groceries if they arrived damaged?" -- Groceries are non-returnable under this policy ..."
+  - (sim=0.701) "As covered above, Groceries and Digital Goods support neither returns nor exchanges. There is no exc..."
+  - (sim=0.690) ""Can I return groceries if they arrived damaged?" -- Groceries are non-returnable under this policy ..."
 
 ## R12 (reasoning, leak_free=True)
 **Query:** if my electronics return also has a restocking fee attached does my status waive THAT too or just the exchange one
@@ -514,11 +456,11 @@ Context-extraction layer retrieved:
 **Why (grounding):** fee:restocking_fee_waiver applies_to rule:return_electronics, but only tier:platinum waives that fee.
 - Seed: "I am a Gold tier member." -> Stored: loyalty_tier.tier = Gold
 
-**KG-unstructured (438 tokens, 374+64):**
-> According to the policy, the "Standard Exchange" rule waives both the "Return Electronics" and "Return Furniture" rules. Since you have a Platinum loyalty tier, you are exempt from the "Standard Exchange" rule. Therefore, your Platinum status would waive both the return and restocking fees for the electronics.
+**KG-unstructured (388 tokens, 328+60):**
+> According to our policy, the Platinum loyalty tier only waives the exchange fee (which is $10) as per the Standard Exchange Rule. The restocking fee is a separate fee associated with the Return Electronics policy, which is $15. The Platinum tier does not exempt you from this fee.
 
-**CG-unstructured (770 tokens, 723+47):**
-> According to the policy document excerpts, as a Gold-tier member, your status only waives the exchange fee, not the restocking fee. You would still pay the full restocking fee, even if you're exchanging an item.
+**CG-unstructured (656 tokens, 601+55, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> According to our policy, being a Gold member only waives the exchange fee, not the restocking fee. So, if you're a Gold member and your electronics return also has a restocking fee attached, you would still be responsible for paying the restocking fee.
 Context-extraction layer retrieved:
   - (sim=0.763) "Gold members get their exchange fee waived -- that's the $10 fee mentioned above for both Electronic..."
   - (sim=0.735) "A Gold-tier member buys a $300 television (Electronics) in October, outside any blackout window, and..."
@@ -529,11 +471,11 @@ Context-extraction layer retrieved:
 **Expected:** Identical -- both use the Standard Exchange Rule, so the same Gold/Platinum waiver applies equally to both.
 **Why (grounding):** both product_category:electronics and product_category:furniture -> rule:exchange_standard.
 
-**KG-unstructured (453 tokens, 398+55):**
-> According to the policy, the "Standard Exchange" rule waives the return fees for both "Return Electronics" and "Return Furniture". This means that the same tier (Platinum or Gold) that gets the exchange fee waived for electronics also gets it waived for furniture.
+**KG-unstructured (447 tokens, 365+82):**
+> According to the policy, the Exchange Rule 'Standard Exchange Rule' applies to both Electronics and Furniture. This rule states that the exchange fee is waived, as the 'allowed' field is set to True. The fee waiver is not tier-specific, so the same tiers (Gold and Platinum) that are exempt from the Holiday Sale Blackout would also be exempt from the exchange fee for both Electronics and Furniture.
 
-**CG-unstructured (719 tokens, 659+60, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to the policy, the exchange fee waiver for electronics and furniture is the same. Both categories share the same Standard Exchange Rule, which means that the exchange fee is $10 for both electronics and furniture. The tier that gets the exchange fee waived is Platinum, which covers both electronics and furniture.
+**CG-unstructured (670 tokens, 626+44, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> According to the policy, the exchange fee waiver tiers differ between Electronics and Furniture. For Electronics, the exchange fee is waived for Platinum members. For Furniture, the exchange fee is waived for both Platinum and Gold members.
 Context-extraction layer retrieved:
   - (sim=0.827) "If a customer would rather swap an electronics item for something else instead of getting a refund, ..."
   - (sim=0.765) "Only Platinum members get the restocking fee waived. Platinum also covers the exchange fee waiver to..."
@@ -545,17 +487,11 @@ Context-extraction layer retrieved:
 **Why (grounding):** exchange.prior_count is an off-schema fact (no kg_node_id) -- tests honest handling of evidence the static graph doesn't have a rule for.
 - Seed: "I already used my exchange on this order once before." -> Stored: exchange.prior_count = already_exchanged_once
 
-**KG-unstructured (433 tokens, 341+92):**
-> According to the ExchangeRule 'Standard Exchange', if you've already exchanged an Electronics product once, you're not eligible for another exchange under the Standard Exchange policy.
+**KG-unstructured (375 tokens, 328+47):**
+> According to our Standard Exchange Rule, there is a $10 fee for exchanging an item. Since you've already exchanged this electronics item once before, the exchange is still allowed, but you will be charged the $10 fee again.
 
-However, since you're a Platinum loyalty tier member, you're exempt from the Standard Exchange policy. This means you can exchange the Electronics product again without incurring the standard exchange fee.
-
-Please note that this exemption only applies to the Standard Exchange policy and not to any other return or exchange policies.
-
-**CG-unstructured (738 tokens, 650+88, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to the policy, since you've already swapped an electronics item once before, you're not eligible for another standard exchange. The policy doesn't specify a limit on the number of exchanges, but since you're not a Platinum-tier member, you're subject to the Standard Exchange Rule, which doesn't allow multiple exchanges.
-
-You would need to consider returning the item for a refund instead, which would incur the $15 restocking fee.
+**CG-unstructured (684 tokens, 637+47, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> According to our policy, the standard exchange fee for electronics is a flat $10, regardless of the number of exchanges. So, if you want to exchange the item again, you would still be charged the $10 exchange fee.
 Context-extraction layer retrieved:
   - (sim=0.559) "If a customer would rather swap an electronics item for something else instead of getting a refund, ..."
   - (sim=0.548) "Electronics can be sent back within 30 days of delivery, though we do charge a $15 restocking fee to..."
@@ -567,13 +503,11 @@ Context-extraction layer retrieved:
 **Why (grounding):** rule:return_digital_goods refundable=False; rule:exchange_none for digital_goods allowed=False; neither has any tier connection.
 - Seed: "I am a Gold tier member." -> Stored: loyalty_tier.tier = Gold
 
-**KG-unstructured (217 tokens, 144+73):**
-> According to our policy, since the product category is 'Digital Goods' and the ReturnRule is 'Return Digital Goods' with a refundable status of False, it means that digital goods are not eligible for returns or exchanges.
+**KG-unstructured (133 tokens, 113+20):**
+> According to our policy, account status does not affect the return or exchange process for digital goods.
 
-Your account status does not affect the return or exchange policy for digital goods, as it is not a factor in this specific product category.
-
-**CG-unstructured (414 tokens, 343+71, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to our policy, Digital Goods are non-returnable and non-exchangeable. This is stated in the policy document excerpt: "Digital Goods can't be returned once downloaded or activated, for the obvious reason that a digital copy can't be un-downloaded; the same reasoning applies to exchanges too, so neither category supports exchanges at all either."
+**CG-unstructured (352 tokens, 311+41, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> No, your account status does not change the return or exchange policy for Digital Goods. According to our policy, Digital Goods are non-returnable and non-exchangeable, regardless of your account status.
 Context-extraction layer retrieved:
   - (sim=0.686) "Groceries and Digital Goods are both non-returnable, full stop, no exceptions, and support reps shou..."
   - (sim=0.636) ""If I bought electronics during the Black Friday sale, can I still return it?" -- Only if you're Gol..."
@@ -584,19 +518,11 @@ Context-extraction layer retrieved:
 **Expected:** Yes -- Apparel exchanges are already free and warranty doesn't even cover Apparel returns anyway, so it adds nothing there.
 **Why (grounding):** rule:exchange_free fee_usd=0; product:extended_warranty's covers list excludes apparel entirely.
 
-**KG-unstructured (519 tokens, 276+243):**
-> According to the policy, the Extended Warranty covers both Electronics and Furniture. However, the Return Rule for Electronics has a refundable policy with a fee of $15 and a 30-day window, while the Return Rule for Furniture has a refundable policy with a fee of $50 and a 14-day window.
+**KG-unstructured (164 tokens, 111+53):**
+> According to our policy, if you purchase a product with a defect within 30 days of the original purchase date, you are eligible for a full refund or replacement, regardless of whether you have a warranty. This is covered under our 30-Day Satisfaction Guarantee.
 
-In this case, if you purchase the Extended Warranty for Electronics, you would get the same protection as the Return Rule for Electronics, which includes a refundable policy with a fee of $15 and a 30-day window. This means that paying for the Extended Warranty for Electronics would not provide any additional protection that you wouldn't already get for free.
-
-However, if you purchase the Extended Warranty for Furniture, you would get the same protection as the Return Rule for Furniture, which includes a refundable policy with a fee of $50 and a 14-day window. In this case, the Extended Warranty would provide additional protection, as the fee for the Return Rule is higher than the cost of the Extended Warranty.
-
-So, to answer your question, yes, there is a case where paying for the warranty is literally pointless because you'd get the same protection for free, and that is for Electronics.
-
-**CG-unstructured (521 tokens, 438+83, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to the policy, the Extended Warranty covers defect and damage claims that go beyond what the manufacturer's own warranty covers. This means that if a customer's manufacturer's warranty has not yet lapsed, the Extended Warranty would not provide any additional protection.
-
-In this case, paying for the Extended Warranty would indeed be pointless, as the customer would already have the same level of protection provided by the manufacturer's warranty.
+**CG-unstructured (341 tokens, 272+69, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> According to our policy, the Extended Warranty covers defect and damage claims that go beyond what the manufacturer's own warranty covers. If a customer purchases an item with a manufacturer's warranty that already covers the item for its entire lifespan, then paying for the Extended Warranty would indeed be pointless, as the customer would already have the same protection for free.
 Context-extraction layer retrieved:
   - (sim=0.626) "Customers can add the Extended Warranty for $25 at checkout, as a one-time add-on tied to the order...."
   - (sim=0.624) "Coverage is limited to Electronics and Furniture purchases only. It doesn't apply to Apparel, Grocer..."
@@ -608,14 +534,14 @@ Context-extraction layer retrieved:
 **Why (grounding):** rule:return_groceries refundable=False; no tier edge touches it.
 - Seed: "I am a Gold tier member." -> Stored: loyalty_tier.tier = Gold
 
-**KG-unstructured (178 tokens, 115+63):**
-> According to our policy, all orders are eligible for return and refund, regardless of tier status. However, please note that all returns must be made within 30 days of the original order date. If you're trying to return a groceries order, please ensure it's within this timeframe to qualify for a refund.
+**KG-unstructured (133 tokens, 115+18):**
+> I don't have information on whether your status affects the refund policy for groceries orders.
 
-**CG-unstructured (376 tokens, 320+56, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to our policy, groceries are non-returnable regardless of condition or tier status. As a result, we cannot provide a refund for a groceries order, even for customers in a higher tier. The policy is a hard wall, and we do not make exceptions for groceries.
+**CG-unstructured (354 tokens, 320+34, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> Unfortunately, our policy is a hard wall for groceries, regardless of your tier status. Groceries are non-returnable under this policy, and we cannot make exceptions.
 Context-extraction layer retrieved:
   - (sim=0.735) ""Can I return groceries if they arrived damaged?" -- Groceries are non-returnable under this policy ..."
-  - (sim=0.670) "Groceries and Digital Goods are both non-returnable, full stop, no exceptions, and support reps shou..."
+  - (sim=0.669) "Groceries and Digital Goods are both non-returnable, full stop, no exceptions, and support reps shou..."
   - (sim=0.632) "Our return policies vary quite a bit depending on what you bought, and we get a lot of questions abo..."
 
 ## M1 (mixed, leak_free=True)
@@ -624,18 +550,18 @@ Context-extraction layer retrieved:
 **Why (grounding):** rule:exchange_standard fee_usd=10; tier:gold waives fee:exchange_fee_waiver which applies_to it.
 - Seed: "I am a Gold tier member." -> Stored: loyalty_tier.tier = Gold
 
-**KG-unstructured (543 tokens, 437+106):**
-> According to the policy graph, the standard exchange fee for Electronics is $10.
+**KG-unstructured (390 tokens, 328+62):**
+> Based on our policy, the standard exchange fee on electronics is $10.
 
-As for your status, since you're not mentioned specifically, I'll assume you're not a Platinum member. As a non-Platinum member, you wouldn't be exempt from the standard exchange fee. However, you would be exempt from the standard exchange fee on Electronics because the Standard Exchange policy waives the Return Electronics policy, and you're not a Gold member. So, you would not have to pay the standard exchange fee on Electronics.
+However, since you are a Platinum loyalty tier member, you are exempt from the Holiday Sale Blackout, which means you can exchange electronics during this period without any restrictions. Therefore, you would not have to pay the exchange fee.
 
-**CG-unstructured (868 tokens, 807+61):**
-> According to the policy, the standard exchange fee for electronics is $10.
+**CG-unstructured (691 tokens, 622+69, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> According to our policy, the standard exchange fee for electronics is $10.
 
-As a Gold-tier member, you would actually not have to pay the standard exchange fee. According to the policy, Gold-tier members are exempt from the standard exchange fee, so you would not be charged the $10 fee.
+As for your status, I don't have information on your specific loyalty tier. However, I can tell you that if you're a Gold member, you would not have to pay the exchange fee, as Gold members are exempt from paying the exchange fee for exchanges.
 Context-extraction layer retrieved:
   - (sim=0.762) "If a customer would rather swap an electronics item for something else instead of getting a refund, ..."
-  - (sim=0.673) "A Gold-tier member buys a $300 television (Electronics) in October, outside any blackout window, and..."
+  - (sim=0.672) "A Gold-tier member buys a $300 television (Electronics) in October, outside any blackout window, and..."
   - (sim=0.664) "Only Platinum members get the restocking fee waived. Platinum also covers the exchange fee waiver to..."
 
 ## M2 (mixed, leak_free=True)
@@ -643,17 +569,17 @@ Context-extraction layer retrieved:
 **Expected:** $50 fee; yes, warranty covers Furniture returns.
 **Why (grounding):** rule:return_furniture fee_usd=50; product:extended_warranty covers rule:return_furniture.
 
-**KG-unstructured (491 tokens, 436+55):**
-> According to the policy, the restocking fee for a Furniture return is $50.
+**KG-unstructured (323 tokens, 252+71):**
+> According to our return policy, the restocking fee for a furniture return is $50.
 
-As for the warranty, the Extended Warranty covers both Electronics and Furniture. Since the warranty covers Furniture, it would cover the restocking fee of $50 if you have the Extended Warranty.
+As for the warranty, the Extended Warranty policy covers defect and damage claims beyond the manufacturer's warranty. However, it does not specifically mention covering restocking fees. Therefore, I don't have information on whether the warranty covers the restocking fee in this case.
 
-**CG-unstructured (727 tokens, 672+55, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to the policy, the restocking fee for a Furniture return is $50.
+**CG-unstructured (530 tokens, 488+42, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> According to our return policy, the restocking fee for a furniture return is $50. 
 
-As for the warranty, the Extended Warranty covers both Electronics and Furniture. Since the warranty covers Furniture, it would cover the $50 restocking fee in the event of a Furniture return.
+The Extended Warranty does not cover restocking fees. It covers defect and damage claims beyond the manufacturer's warranty.
 Context-extraction layer retrieved:
-  - (sim=0.777) "Furniture works a little differently. You've got a shorter window here, just 14 days, and the restoc..."
+  - (sim=0.776) "Furniture works a little differently. You've got a shorter window here, just 14 days, and the restoc..."
   - (sim=0.727) "Gold members get their exchange fee waived -- that's the $10 fee mentioned above for both Electronic..."
   - (sim=0.680) "Only Platinum members get the restocking fee waived. Platinum also covers the exchange fee waiver to..."
 
@@ -663,17 +589,15 @@ Context-extraction layer retrieved:
 **Why (grounding):** blackout:holiday_sale dates; tier:platinum exempt_from holiday_sale.
 - Seed: "I am a Platinum member." -> Stored: loyalty_tier.tier = Platinum
 
-**KG-unstructured (457 tokens, 408+49):**
-> According to the policy graph, the Holiday Sale Blackout dates are from November 25th to December 5th.
+**KG-unstructured (180 tokens, 106+74):**
+> According to our policy, our holiday sale dates are from November 25th to December 1st.
 
-As for your status, you are a Platinum member, which means you are exempt from the Holiday Sale Blackout restriction.
+As for your status, our loyalty program has a "VIP" tier that excludes sale restrictions for VIP members. However, I need to verify your current tier status to confirm. Can you please provide your loyalty program membership number or email address associated with your account?
 
-**CG-unstructured (743 tokens, 689+54):**
-> According to the policy, the Holiday Sale Blackout runs from November 25th to December 5th.
-
-As a Platinum member, you are exempt from the Holiday Sale Blackout, which means you keep your normal return rights even on purchases made during that window.
+**CG-unstructured (308 tokens, 276+32, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> The Holiday Sale Blackout dates are November 25th through December 5th. As a customer, I don't have information on your specific status.
 Context-extraction layer retrieved:
-  - (sim=0.715) "The Holiday Sale Blackout runs November 25th through December 5th and applies to Electronics -- purc..."
+  - (sim=0.716) "The Holiday Sale Blackout runs November 25th through December 5th and applies to Electronics -- purc..."
   - (sim=0.662) ""If I bought electronics during the Black Friday sale, can I still return it?" -- Only if you're Gol..."
   - (sim=0.646) ""What about returning apparel bought during the January clearance sale?" -- Only Platinum members ke..."
 
@@ -682,11 +606,13 @@ Context-extraction layer retrieved:
 **Expected:** $25; no -- warranty doesn't cover Apparel (and Apparel returns are already free anyway).
 **Why (grounding):** product:extended_warranty cost_usd=25; covers list excludes apparel.
 
-**KG-unstructured (292 tokens, 267+25):**
-> According to the policy facts, the Extended Warranty costs $25 and covers Electronics and Furniture. It does not cover Apparel.
+**KG-unstructured (182 tokens, 102+80):**
+> According to our policy, the warranty is a 2-year protection plan that costs $19.99 for purchases made between January 1st and June 30th, and $24.99 for purchases made between July 1st and December 31st.
 
-**CG-unstructured (448 tokens, 415+33, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to the policy, the Extended Warranty costs $25 and covers Electronics and Furniture, but not Apparel. Therefore, the warranty would not cover an apparel return.
+As for coverage, the warranty covers defects in materials and workmanship for eligible products, but it does not cover apparel or accessories.
+
+**CG-unstructured (288 tokens, 249+39, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> The warranty is an extended warranty that covers Electronics and Furniture, but not Apparel. It does not cover Digital Goods or Groceries. I don't have information on the cost of the warranty.
 Context-extraction layer retrieved:
   - (sim=0.696) "Apparel is the most forgiving category by a wide margin. You get a generous 45 days to send things b..."
   - (sim=0.663) ""Does the warranty cover a pair of jeans?" -- No, the extended warranty only covers Electronics and ..."
@@ -698,19 +624,19 @@ Context-extraction layer retrieved:
 **Why (grounding):** tests whether the model keeps two unrelated facts straight without conflating them.
 - Seed: "I already declined the extended warranty." -> Stored: warranty.status = declined
 
-**KG-unstructured (464 tokens, 364+100):**
-> According to the policy graph, the exchange fee for Furniture is $50.
+**KG-unstructured (292 tokens, 255+37):**
+> According to our policy, the exchange fee for furniture is $10.
 
-As for the protection plan, I can check that for you. Since you didn't specify which product category your order was for, I'll assume it's for either Electronics or Furniture, as the Extended Warranty covers both categories. According to the policy graph, the Extended Warranty costs $25 and covers both Electronics and Furniture. If you did add this protection plan to your order, it would have been added to your purchase.
+As for the protection plan, I don't have information on whether you added the Extended Warranty to your order.
 
-**CG-unstructured (765 tokens, 696+69):**
-> According to the policy, the exchange fee for Furniture is $10, which is the same as the exchange fee for Electronics.
+**CG-unstructured (698 tokens, 661+37):**
+> According to our policy, the exchange fee for furniture is $10.
 
-As for the protection plan, I don't have that information. The policy only mentions the Extended Warranty, which covers both Electronics and Furniture, but it doesn't mention whether you added it to your order or not.
+As for the protection plan, I don't have information on whether you added it to your order or not.
 Context-extraction layer retrieved:
   - (sim=0.762) "If a customer would rather swap an electronics item for something else instead of getting a refund, ..."
   - (sim=0.702) "Only Platinum members get the restocking fee waived. Platinum also covers the exchange fee waiver to..."
-  - (sim=0.698) "Gold members get their exchange fee waived -- that's the $10 fee mentioned above for both Electronic..."
+  - (sim=0.697) "Gold members get their exchange fee waived -- that's the $10 fee mentioned above for both Electronic..."
 
 ## M6 (mixed, leak_free=True)
 **Query:** which tiers waive the restocking fee and does my status put me in that group
@@ -718,16 +644,16 @@ Context-extraction layer retrieved:
 **Why (grounding):** only tier:platinum -waives-> fee:restocking_fee_waiver.
 - Seed: "I am a Gold tier member." -> Stored: loyalty_tier.tier = Gold
 
-**KG-unstructured (176 tokens, 104+72):**
-> According to our store's policy, the following tiers waive the restocking fee:
+**KG-unstructured (157 tokens, 104+53):**
+> According to our policy, the following tiers waive the restocking fee:
 
-* Platinum members
-* Gold members with a minimum annual spend of $5,000
+* Platinum Members
+* Gold Members with 5+ years of loyalty
 
-Please note that your status is not explicitly mentioned in the policy, so I would need more information about your membership level or spending habits to determine if you fall into one of these tiers.
+Please note that your status is not mentioned in your query, so I don't have information about your current status.
 
-**CG-unstructured (323 tokens, 260+63, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to our policy, only the Platinum tier waives the restocking fee. Since you didn't specify your loyalty tier, I'll assume you're asking about your current status. If that's correct, I can tell you that if you're not Platinum, you won't have your restocking fee waived.
+**CG-unstructured (298 tokens, 260+38, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> According to our policy, the Platinum tier is the only one that waives the restocking fee. Since you didn't mention your tier, I don't have information on your status.
 Context-extraction layer retrieved:
   - (sim=0.760) ""Does my loyalty tier ever cover a restocking fee?" -- Only if you're Platinum. Gold covers exchange..."
   - (sim=0.719) "Only Platinum members get the restocking fee waived. Platinum also covers the exchange fee waiver to..."
@@ -738,15 +664,11 @@ Context-extraction layer retrieved:
 **Expected:** Jan 2 - Jan 15; Platinum only.
 **Why (grounding):** blackout:clearance_event dates; only tier:platinum exempt_from it.
 
-**KG-unstructured (396 tokens, 352+44):**
-> According to the policy graph, the Clearance Event Blackout dates are January 2nd to January 15th.
+**KG-unstructured (110 tokens, 102+8):**
+> I don't have that information.
 
-As for your second question, yes, the Platinum tier is exempt from the Clearance Event Blackout.
-
-**CG-unstructured (614 tokens, 575+39, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to the policy graph, the Clearance Event Blackout dates are January 2nd to January 15th.
-
-As for exemption, Platinum members are exempt from the Clearance Event Blackout.
+**CG-unstructured (359 tokens, 324+35, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> The Clearance Event Blackout dates are January 2nd to January 15th. During this time, only Platinum members are exempt from the return restrictions on Apparel purchases.
 Context-extraction layer retrieved:
   - (sim=0.700) "Separately, there's the Clearance Event Blackout from January 2nd to January 15th, which restricts A..."
   - (sim=0.656) ""What about returning apparel bought during the January clearance sale?" -- Only Platinum members ke..."
@@ -758,15 +680,15 @@ Context-extraction layer retrieved:
 **Why (grounding):** product_category:furniture -> rule:exchange_standard (allowed=True, fee=10) vs rule:exchange_none for groceries.
 - Seed: "I bought Furniture on my last order." -> Stored: product.category = Furniture
 
-**KG-unstructured (254 tokens, 114+140):**
-> According to our store's policy, the exchange fee for non-perishable items is 10% of the original purchase price. However, I don't have information on the specific category of the item you ordered last time, so I can't determine the exact exchange fee without knowing the item's category.
+**KG-unstructured (122 tokens, 114+8):**
+> I don't have that information.
 
-Regarding the category, our policy states that non-perishable items (such as electronics, clothing, and home goods) are generally exchangeable, whereas perishable items (like groceries) are locked and cannot be exchanged. If you're unsure about the category of the item you ordered, please provide me with the item's name or description, and I'll do my best to assist you.
+**CG-unstructured (370 tokens, 296+74, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> I'd be happy to help you with that.
 
-**CG-unstructured (405 tokens, 296+109, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> Since you didn't specify what you ordered last time, I'll need more information to determine the exchange fee. However, I can tell you that if you ordered an electronics item or furniture, the standard exchange fee is $10, as per our policy.
+To determine the exchange fee, I would need to know what category your last order falls under. If it's Groceries or Digital Goods, exchanges are not allowed, so there is no exchange fee to consider.
 
-As for whether the category is exchangeable, I can tell you that if you ordered groceries or digital goods, those categories do not support exchanges. If you ordered something else, I'd be happy to help you with the exchange process and answer any questions you may have about the fee.
+If it's an Electronics or Furniture item, the exchange fee is $10, as per our policy.
 Context-extraction layer retrieved:
   - (sim=0.738) "As covered above, Groceries and Digital Goods support neither returns nor exchanges. There is no exc..."
   - (sim=0.705) "If a customer would rather swap an electronics item for something else instead of getting a refund, ..."
@@ -777,17 +699,19 @@ Context-extraction layer retrieved:
 **Expected:** Yes, warranty covers it; yes, exchange is allowed ($10 fee).
 **Why (grounding):** product:extended_warranty covers rule:return_electronics; rule:exchange_standard allowed=True.
 
-**KG-unstructured (511 tokens, 398+113):**
-> According to the policy, the Extended Warranty covers both Electronics and Furniture. Since the return is for an Electronics product, the warranty would cover it.
+**KG-unstructured (416 tokens, 327+89):**
+> According to our policy:
 
-Regarding exchanging an Electronics product for a different model, the policy doesn't explicitly state that it's allowed. However, it does mention the "Standard Exchange" rule, which waives the Return Electronics policy. This implies that exchanges are possible, but it's not explicitly stated that it's allowed for Electronics products.
+* The Extended Warranty applies to Electronics, which means it covers defect and damage claims beyond the manufacturer's warranty.
+* The Standard Exchange Rule applies to Electronics, which means you can exchange an electronics product for a different model, but there is a $10 exchange fee.
 
-To confirm, I would need more information or clarification on the specific return and exchange policies for Electronics products.
+So, to answer your questions: yes, the warranty covers an electronics return, and yes, you can exchange an electronics product for a different model.
 
-**CG-unstructured (834 tokens, 707+127, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to the policy, the Extended Warranty covers both Electronics and Furniture. Since the return is for an Electronics item, the Extended Warranty would cover it.
+**CG-unstructured (723 tokens, 636+87, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> According to the policy:
 
-Regarding exchanging an Electronics item for a different model instead of refunding, the policy states that "Electronics can be sent back within 30 days of delivery, though we do charge a $15 restocking fee to cover the cost of quality-checking returned devices before they go back on the shelf (or get refurbished, if they don't pass inspection)." This implies that exchanging an Electronics item for a different model is allowed, and the standard exchange fee for Electronics is $10.
+* The Extended Warranty applies to Electronics, and it covers "defect and damage claims beyond manufacturer's warranty". However, it does not explicitly state that it covers returns, so I don't have information on whether the warranty covers an electronics return.
+* Yes, you can exchange electronics for a different model instead of refunding. The Standard Exchange Rule allows exchanges for electronics, with a $10 exchange fee.
 Context-extraction layer retrieved:
   - (sim=0.690) "Electronics can be sent back within 30 days of delivery, though we do charge a $15 restocking fee to..."
   - (sim=0.687) "If a customer would rather swap an electronics item for something else instead of getting a refund, ..."
@@ -799,13 +723,15 @@ Context-extraction layer retrieved:
 **Why (grounding):** rule:return_electronics fee_usd=15; tier:platinum waives fee:restocking_fee_waiver which applies_to it.
 - Seed: "I am a Platinum member." -> Stored: loyalty_tier.tier = Platinum
 
-**KG-unstructured (414 tokens, 337+77):**
-> According to the ReturnRule 'Return Electronics', the normal restocking fee for electronics is $15.
+**KG-unstructured (355 tokens, 324+31):**
+> According to our policy, the standard restocking fee for electronics is $10. 
 
-As for your status, you are not mentioned in the policy facts provided. However, if you were to mention your loyalty tier, I can tell you that being in the Platinum tier would exempt you from the Standard Exchange fee, which would normally include a $15 restocking fee.
+Your loyalty status does not affect the restocking fee for electronics.
 
-**CG-unstructured (777 tokens, 733+44):**
-> According to the policy, the restocking fee for Electronics is $15. As a Platinum member, your status would exempt you from this fee, so you would not have to pay the $15 restocking fee.
+**CG-unstructured (562 tokens, 531+31, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> According to our policy, the normal restocking fee for Electronics is $15. 
+
+Your loyalty status does not affect the restocking fee for Electronics.
 Context-extraction layer retrieved:
   - (sim=0.724) "Gold members get their exchange fee waived -- that's the $10 fee mentioned above for both Electronic..."
   - (sim=0.707) "Electronics can be sent back within 30 days of delivery, though we do charge a $15 restocking fee to..."
@@ -816,15 +742,15 @@ Context-extraction layer retrieved:
 **Expected:** Yes, both $10; no -- the warranty covers RETURNS for those categories, not the exchange fee itself, so it doesn't apply here.
 **Why (grounding):** both -> rule:exchange_standard (fee=10); product:extended_warranty's covers edges point only to return rules, never exchange rules.
 
-**KG-unstructured (478 tokens, 395+83):**
-> According to the policy, the ExchangeRule 'Standard Exchange' has a fee of $10, but it's exempt for Platinum members and Gold members. This means that the exchange fee is not applicable for these loyalty tiers.
+**KG-unstructured (433 tokens, 362+71):**
+> According to our policy, the exchange fee for both Electronics and Furniture is $10, as stated in the Standard Exchange Rule.
 
-As for the warranty, the WarrantyProduct 'Extended Warranty' covers both Electronics and Furniture, and its cost is $25. This warranty can help with returns or exchanges for both product categories.
+As for the warranty, it does not directly help with exchanges, but it does apply to both Electronics and Furniture. The Extended Warranty covers defect and damage claims beyond the manufacturer's warranty, but it does not affect exchange fees.
 
-**CG-unstructured (718 tokens, 656+62, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to the policy, the exchange fees are the same for both Electronics and Furniture, which is $10.
+**CG-unstructured (688 tokens, 623+65, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> According to our policy, yes, the exchange fees are the same for both electronics and furniture, which is $10. 
 
-Regarding the warranty, the Extended Warranty covers both Electronics and Furniture. However, it does not help with exchange fees. The Extended Warranty only provides coverage for the products themselves, not for exchange fees.
+As for the warranty, it does not cover exchange fees. The warranty, specifically the Extended Warranty, covers defect and damage claims beyond the manufacturer's warranty, but it does not include exchange fees.
 Context-extraction layer retrieved:
   - (sim=0.823) "If a customer would rather swap an electronics item for something else instead of getting a refund, ..."
   - (sim=0.727) "Gold members get their exchange fee waived -- that's the $10 fee mentioned above for both Electronic..."
@@ -836,17 +762,15 @@ Context-extraction layer retrieved:
 **Why (grounding):** blackout:holiday_sale dates; tier:gold exempt_from holiday_sale.
 - Seed: "I am a Gold tier member." -> Stored: loyalty_tier.tier = Gold
 
-**KG-unstructured (472 tokens, 406+66):**
-> According to the policy graph, the Holiday Sale Blackout dates are from November 25th to December 5th.
+**KG-unstructured (157 tokens, 104+53):**
+> According to our policy, our holiday sale dates are from November 25th to December 1st.
 
-As for your status, you are a Platinum member, which means you are exempt from the Holiday Sale Blackout. This is stated in the relationship: Platinum --exempt_from--> Holiday Sale Blackout.
+As for your status, our loyalty program offers exclusive benefits to our Premium Members. However, the holiday sale dates mentioned above are not excluded for Premium Members.
 
-**CG-unstructured (716 tokens, 653+63):**
-> According to the policy, the Holiday Sale Blackout runs from November 25th to December 5th.
-
-As a Gold tier member, you are exempt from the Holiday Sale Blackout, which means you can still return or exchange purchases made during that period, unlike most customers who are locked into final sale.
+**CG-unstructured (319 tokens, 274+45, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> The Holiday Sale Blackout dates are November 25th through December 5th. As a customer, I don't have information on your specific status, so I don't know if you're exempt from this blackout.
 Context-extraction layer retrieved:
-  - (sim=0.677) "The Holiday Sale Blackout runs November 25th through December 5th and applies to Electronics -- purc..."
+  - (sim=0.678) "The Holiday Sale Blackout runs November 25th through December 5th and applies to Electronics -- purc..."
   - (sim=0.654) ""If I bought electronics during the Black Friday sale, can I still return it?" -- Only if you're Gol..."
   - (sim=0.622) ""What about returning apparel bought during the January clearance sale?" -- Only Platinum members ke..."
 
@@ -855,13 +779,11 @@ Context-extraction layer retrieved:
 **Expected:** Groceries exchanges aren't permitted at all -- there's no fee because there's no option. Furniture is $10.
 **Why (grounding):** rule:exchange_none (groceries) allowed=False vs rule:exchange_standard (furniture) fee_usd=10.
 
-**KG-unstructured (364 tokens, 258+106):**
-> According to the policy, there is no fee for exchanging groceries because the category "Groceries" is not mentioned in the policy. The policy only mentions "Electronics" and "Furniture" as product categories.
+**KG-unstructured (255 tokens, 245+10):**
+> I don't have information about exchanging groceries.
 
-However, if you're asking about the fee difference between exchanging furniture and electronics, the answer is that there is no fee for exchanging electronics because the Platinum loyalty tier is exempt from the Standard Exchange rule, which has a fee of $10. Therefore, the fee difference between exchanging furniture and electronics is $10.
-
-**CG-unstructured (538 tokens, 492+46, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to the policy, there is no exchange fee for Groceries, as it does not support exchanges. Therefore, there is no fee difference between exchanging Groceries and Furniture, as there is no exchange fee for Groceries.
+**CG-unstructured (498 tokens, 479+19, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> There is no exchange fee for Groceries. The exchange fee for Furniture is $10.
 Context-extraction layer retrieved:
   - (sim=0.774) "If a customer would rather swap an electronics item for something else instead of getting a refund, ..."
   - (sim=0.684) "As covered above, Groceries and Digital Goods support neither returns nor exchanges. There is no exc..."
@@ -873,35 +795,39 @@ Context-extraction layer retrieved:
 **Why (grounding):** product:extended_warranty covers both rule:return_electronics and rule:return_furniture.
 - Seed: "I already purchased the extended warranty." -> Stored: warranty.status = purchased
 
-**KG-unstructured (574 tokens, 395+179):**
-> Based on the provided policy facts, here's the cost breakdown for returning Electronics and Furniture with protection coverage:
+**KG-unstructured (474 tokens, 362+112):**
+> If you have protection coverage, here are the costs for returning Electronics and Furniture:
 
 **Returning Electronics:**
 
-* If you have protection coverage (Extended Warranty), the return is covered, and there is no additional fee.
-* If you don't have protection coverage, the return is subject to the "Return Electronics" policy, which has a fee of $15 and a 30-day window.
+* Return window: 30 days (from Return Electronics policy)
+* Refundable: Yes
+* Fee: $15 (from Return Electronics policy)
 
 **Returning Furniture:**
 
-* If you have protection coverage (Extended Warranty), the return is covered, and there is no additional fee.
-* If you don't have protection coverage, the return is subject to the "Return Furniture" policy, which has a fee of $50 and a 14-day window.
+* Return window: 14 days (from Return Furniture policy)
+* Refundable: Yes
+* Fee: $50 (from Return Furniture policy)
 
-Please note that these costs and windows apply only to returns without protection coverage. If you have protection coverage, the return is covered, and there is no additional fee.
+Note that protection coverage does not affect the return window or refundability, but it may provide additional benefits or coverage.
 
-**CG-unstructured (867 tokens, 713+154):**
-> Based on the policy, if you have protection coverage, here's what you can expect:
+**CG-unstructured (867 tokens, 680+187):**
+> If you have protection coverage, here's what you can expect:
 
 **Returning Electronics:**
 
-* Return fee: $15 (as per the Return Electronics rule)
-* Exchange fee (if you choose to exchange instead of getting a refund): $10 (waived if you're a Platinum member, otherwise, you'll pay the $10 fee)
+* Return fee: $15 (as per the Return Electronics policy)
+* Exchange fee (if you choose to exchange instead of getting a refund): $10 (as per the Standard Exchange Rule)
+* If you're a Gold member, the exchange fee is waived, so you only pay the return fee of $15.
 
 **Returning Furniture:**
 
-* Return fee: $50 (as per the Return Furniture rule)
-* Exchange fee (if you choose to exchange instead of getting a refund): $10 (waived if you're a Platinum member, otherwise, you'll pay the $10 fee)
+* Return fee: $50 (as per the Return Furniture policy)
+* Exchange fee (if you choose to exchange instead of getting a refund): $10 (as per the Standard Exchange Rule)
+* If you're a Gold member, the exchange fee is waived, but you still pay the full return fee of $50.
 
-Note that Platinum members are exempt from the Return Furniture rule, so they won't incur the $50 return fee.
+Note that protection coverage doesn't affect the return or exchange fees, but it does provide additional benefits, such as coverage for defect and damage claims beyond the manufacturer's warranty.
 Context-extraction layer retrieved:
   - (sim=0.732) "Coverage is limited to Electronics and Furniture purchases only. It doesn't apply to Apparel, Grocer..."
   - (sim=0.674) "If a customer would rather swap an electronics item for something else instead of getting a refund, ..."
@@ -912,17 +838,17 @@ Context-extraction layer retrieved:
 **Expected:** Lowest return fee ($0): Apparel (Groceries/Digital Goods aren't $0 -- they're simply not returnable at all, a different thing). Lowest exchange fee ($0): also Apparel. Same category.
 **Why (grounding):** rule:return_apparel fee_usd=0 vs return_groceries/digital_goods refundable=False (not comparable as a '$' figure); rule:exchange_free (apparel) fee_usd=0 vs exchange_none (groceries/digital) allowed=False.
 
-**KG-unstructured (159 tokens, 108+51):**
-> According to our store's return and exchange policy, the category with the lowest return fee is Electronics, with a fee of $5.
+**KG-unstructured (145 tokens, 108+37):**
+> According to our return and exchange policy, the lowest return fee is $5.99 for all categories. 
 
-As for the exchange fee, it's the same category, Electronics, with a fee of $5 as well.
+The lowest exchange fee is also $5.99 for all categories.
 
-**CG-unstructured (341 tokens, 317+24, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
-> According to the policy, the category with the lowest return fee is Electronics, with a return fee of $15.
+**CG-unstructured (378 tokens, 317+61, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> According to the policy, the Electronics category has the lowest return fee, which is $15. However, the lowest exchange fee is actually $10, which applies to both Electronics and Furniture categories. So, the exchange fee is the same for both categories, but the return fee is lower in Electronics.
 Context-extraction layer retrieved:
   - (sim=0.709) "If a customer would rather swap an electronics item for something else instead of getting a refund, ..."
   - (sim=0.702) "Exchanges are handled separately from returns and don't always follow the same rule as the return po..."
-  - (sim=0.687) "Only Platinum members get the restocking fee waived. Platinum also covers the exchange fee waiver to..."
+  - (sim=0.688) "Only Platinum members get the restocking fee waived. Platinum also covers the exchange fee waiver to..."
 
 ## M16 (mixed, leak_free=True)
 **Query:** given my status would either fee get waived on an electronics order or am i paying both fees straight up
@@ -930,13 +856,11 @@ Context-extraction layer retrieved:
 **Why (grounding):** tier:bronze has no waives edges at all.
 - Seed: "I am a Bronze member." -> Stored: loyalty_tier.tier = Bronze
 
-**KG-unstructured (383 tokens, 339+44):**
-> Based on the policy graph, since you are a Platinum member, you are exempt from the Standard Exchange fee and the Holiday Sale Blackout. Therefore, you would not pay either of these fees on an electronics order.
+**KG-unstructured (372 tokens, 326+46):**
+> As a Gold loyalty tier member, you are exempt from the Holiday Sale Blackout, but that doesn't directly affect the exchange fees. However, I don't have information on whether your loyalty tier status affects the exchange fees.
 
-**CG-unstructured (698 tokens, 627+71):**
-> Based on the policy facts, since your loyalty tier is Bronze, you do not get any fee breaks. As a Bronze member, you would pay both the exchange fee and the restocking fee straight up.
-
-According to the policy document excerpt, Bronze and Silver members have identical fee treatment: full exchange fees, full restocking fees, no blackout exemptions.
+**CG-unstructured (586 tokens, 531+55, FELL BACK: no stored decision trace matched this question, structurally or by similarity):**
+> You are a Gold member. According to the policy, Gold members get their exchange fee waived, but they still pay the full restocking fee. So, on an electronics order, you would pay the restocking fee ($15) but the exchange fee would be waived.
 Context-extraction layer retrieved:
   - (sim=0.639) "Only Platinum members get the restocking fee waived. Platinum also covers the exchange fee waiver to..."
   - (sim=0.619) ""I'm Silver tier, do I get any fee breaks?" -- No, Bronze and Silver have identical fee treatment: f..."
