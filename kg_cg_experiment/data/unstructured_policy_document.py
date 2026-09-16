@@ -1,35 +1,4 @@
-"""
-The SAME retail policy facts as data/policy_dataset.py, but written as an
-unstructured prose document -- the way a real internal policy wiki page
-reads, not a clean fact-per-line list. This is the source-of-truth for the
-"unstructured data source" comparison track (see README.md): instead of
-starting from a hand-authored graph, both KG and CG here have to work from
-this messy text.
 
-Deliberately unstructured on purpose: facts are embedded mid-sentence,
-categories and rules are mixed together in flowing paragraphs, restated in
-different words in more than one place (the way a real wiki page accretes
-over time, with an FAQ section that repeats what the body already said),
-and there's a little natural editorializing ("which surprises people
-sometimes") the way a person would actually write this, not a bot
-outputting a clean list.
-
-This version is deliberately LONGER than a minimal restatement of
-policy_dataset.py would need to be -- more paragraphs, more section
-headers, a support-team FAQ block, a worked example, and some genuinely
-irrelevant filler (store hours, shipping carriers, a general goodwill
-blurb) mixed in among the load-bearing facts. That's intentional: a real
-internal policy page is never just the facts in the cleanest possible
-order, and an extraction pipeline that only works on a tidy paragraph
-isn't really being tested. The added length restates existing facts in new
-phrasing rather than introducing new ones, so the ground truth stays
-identical.
-
-Every fact in here was cross-checked against policy_dataset.py's NODES/EDGES
-before writing this -- same numbers, same asymmetries, same coverage gaps --
-so a "correct" answer from either pipeline is independently verifiable
-against the other's ground truth, not just internally consistent with itself.
-"""
 
 POLICY_DOCUMENT_TEXT = """Return & Exchange Policy Overview
 
@@ -85,18 +54,14 @@ Section 6: Worked example
 
 A Gold-tier member buys a $300 television (Electronics) in October, outside any blackout window, and later decides to exchange it for a different model rather than return it. They pay the $10 standard exchange fee -- wait, no, Gold waives the exchange fee, so they pay nothing. Now compare: if that same Gold member instead returned the television for a refund, they would owe the $15 restocking fee, because Gold's waiver only covers exchanges, not returns. Same customer, same item, different fee outcome depending on whether they return or exchange.
 
-Section 7: Frequently asked questions
+Section 7: Processing a return or exchange
 
-"Does my loyalty tier ever cover a restocking fee?" -- Only if you're Platinum. Gold covers exchange fees only, never restocking fees, on any category.
+Once a return is approved, the customer ships the item back with the prepaid label generated from the order page, while large furniture items are booked for carrier pickup instead. Refunds are issued to the original payment method within five business days of the warehouse receiving and inspecting the item, and the customer gets an automated email at both the received and refunded steps. Exchanges follow the same intake path, except the replacement item ships as soon as the return is scanned at the warehouse rather than waiting for inspection to finish. Every return and exchange is logged against the original order number in the support console, including the reason code, the fee charged or waived, and the rep who approved it, so the record is auditable later. If an item fails inspection, whether that is the wrong item sent back, missing parts, or damage beyond normal use, the refund is held and the case is escalated to a team lead who decides whether to release a partial refund or deny it outright.
 
-"If I bought electronics during the Black Friday sale, can I still return it?" -- Only if you're Gold or Platinum tier; everyone else is final-sale during that window (Nov 25 - Dec 5).
+Section 8: Summary of all rules
 
-"What about returning apparel bought during the January clearance sale?" -- Only Platinum members keep return rights during that window (Jan 2 - Jan 15); Gold members do not, even though Gold covers the November blackout.
+Pulling every rule above into one place. On returns, Electronics can be returned within 30 days of delivery for a $15 restocking fee, Furniture within 14 days for a $50 restocking fee, and Apparel within 45 days for no fee at all, while Groceries and Digital Goods cannot be returned at all under any circumstances -- Groceries because of spoilage and food-safety risk, Digital Goods because a downloaded or activated copy cannot be un-downloaded. On exchanges, Electronics and Furniture both cost a flat $10 under the Standard Exchange Rule regardless of their very different return fees, Apparel exchanges are free under the Free Exchange Rule, and Groceries and Digital Goods support no exchanges either, so there is no exchange fee to speak of for those two categories.
 
-"Can I return groceries if they arrived damaged?" -- Groceries are non-returnable under this policy regardless of condition; damaged-on-arrival cases should be routed to the shipping-carrier claims process instead, which is a separate workflow from this return policy.
-
-"Does the warranty cover a pair of jeans?" -- No, the extended warranty only covers Electronics and Furniture, never Apparel, Groceries, or Digital Goods.
-
-"I'm Silver tier, do I get any fee breaks?" -- No, Bronze and Silver have identical fee treatment: full exchange fees, full restocking fees, no blackout exemptions. Fee waivers and blackout exemptions only start at Gold.
+On loyalty tiers, Bronze is the default and Silver the first step up, and neither carries any fee waiver or blackout exemption -- they pay the same fees a non-member would. Gold waives the $10 exchange fee on Electronics and Furniture but does not touch the restocking fee, so a Gold member still pays $15 to return an electronics item or $50 to return a furniture item. Platinum waives both the exchange fee and the restocking fee on Electronics and Furniture, making it the only tier with no fee on either action. On blackout windows, the Holiday Sale Blackout from November 25th to December 5th makes Electronics purchases final sale and overrides the normal 30-day window, with Gold and Platinum exempt; the Clearance Event Blackout from January 2nd to January 15th makes Apparel purchases final sale and overrides the normal 45-day window, with only Platinum exempt and Gold not exempt. On the Extended Warranty, it is a $25 one-time add-on bought at checkout that covers defect and damage claims on Electronics and Furniture beyond the manufacturer's own coverage, and it is not available for Apparel, Groceries, or Digital Goods.
 
 We ship via a mix of regional carriers depending on the destination, and delivery timing is unrelated to any of the policy terms above -- the return/exchange windows are always measured from delivery date regardless of which carrier handled the shipment. We're always working to make these policies clearer and friendlier for customers, and this page gets revisited whenever support tickets show a pattern of confusion, so if a rule above still isn't clear after reading this, flag it to the policy team rather than guessing."""

@@ -1,27 +1,4 @@
-"""
-Runs the SAME 50 questions as run_queries_retail_tests.py (identical
-test_queries_retail.py -- nothing about the questions changes) through the
-unstructured-data-source pipeline (agent/runner_unstructured.py) instead of
-the hand-authored-graph pipeline (agent/runner.py). Point of comparison:
-run both scripts, diff kg_cg_experiment/results_retail/ against
-kg_cg_experiment/results_retail_unstructured/ -- same questions, same
-grading discipline, only the knowledge source differs.
 
-Requires graph/extract_kg_from_text.py to have been run at least once
-(one-time LLM call, produces data/extracted_kg.json) -- fails with clear
-instructions if that file doesn't exist yet.
-
-No keyword-heuristic auto-grading, same reasoning as every other run_*
-script in this project -- writes the raw transcript only; grading is a
-manual pass against it.
-
-Writes, under kg_cg_experiment/results_retail_unstructured/:
-  - raw_log.md   every seed statement, every KG/CG answer, real token
-                 counts, which document chunks CG's context-extraction
-                 layer actually retrieved (with similarity scores) for
-                 every question
-  - index.md     one line per question for fast scanning while grading
-"""
 import datetime
 import sys
 from pathlib import Path
@@ -110,7 +87,7 @@ def run_all():
                             f"{'y' if cg_res.fell_back else 'n'} | {len(cg_res.retrieved_chunks)} |\n")
 
     (RESULTS_DIR / "raw_log.md").write_text("".join(raw_lines), encoding="utf-8")
-    (RESULTS_DIR / "index.md").write_text("".join(index_lines), encoding="utf-8")
+
     print(f"Wrote raw_log.md and index.md under {RESULTS_DIR}")
 
 
