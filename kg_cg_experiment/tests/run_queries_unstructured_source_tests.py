@@ -87,6 +87,7 @@ def run_all():
                             f"{'y' if cg_res.fell_back else 'n'} | {len(cg_res.retrieved_chunks)} |\n")
 
     (RESULTS_DIR / "raw_log.md").write_text("".join(raw_lines), encoding="utf-8")
+    (RESULTS_DIR / "index.md").write_text("".join(index_lines), encoding="utf-8")
 
     print(f"Wrote raw_log.md and index.md under {RESULTS_DIR}")
 

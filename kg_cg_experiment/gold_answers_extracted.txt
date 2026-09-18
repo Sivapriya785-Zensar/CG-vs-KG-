@@ -1,0 +1,52 @@
+50 lines extracted
+
+1. No — Groceries are non-returnable, no exceptions.
+2. $50 restocking fee.
+3. $15 fee, 30-day window.
+4. $0, no fee; 45-day window.
+5. No — non-returnable once downloaded or activated.
+6. Gold waives the exchange fee.
+7. Platinum only.
+8. $25; covers defect/damage beyond manufacturer warranty.
+9. Cannot determine purchase status.
+10. Yes, $10 fee.
+11. Nov 25–Dec 5; restricts Electronics.
+12. Platinum waives the Electronics restocking fee.
+13. No — Groceries exchanges aren't allowed.
+14. Jan 2–Jan 15.
+15. Furniture → $10 standard exchange fee.
+16. Gold and Platinum.
+17. Warranty covers eligible Furniture defect/damage claims.
+18. Gold: No. Platinum: Yes.
+19. Gold: No. Platinum: Yes.
+20. No — warranty does not cover Apparel.
+21. Nothing helps — Groceries are non-returnable regardless.
+22. Platinum is exempt; normal return rights remain.
+23. Bronze → neither waiver.
+24. Two different rules: $50 return vs $10 exchange.
+25. Without warranty: $15 return fee; warranty covers eligible Electronics claims.
+26. $0 — Apparel exchange is free regardless of tier.
+27. Same.
+28. No — Grocery exchange prohibited.
+29. Same.
+30. Identical — both $10 and same waiver treatment.
+31. No exchange-count limit is stated.
+32. No — Digital Goods cannot be returned or exchanged.
+33. Yes — Apparel exchange is free and warranty excludes Apparel.
+34. No — Grocery return is non-returnable regardless.
+35. $10 standard; Gold → $0.
+36. $50; warranty covers eligible Furniture claims.
+37. Nov 25–Dec 5; Platinum exempt.
+38. $25; No, Apparel isn't covered.
+39. $10; warranty purchase status cannot be determined.
+40. Platinum only; Gold does not.
+41. Jan 2–Jan 15; Platinum only.
+42. Furniture → $10; exchange allowed.
+43. Yes; exchange allowed for $10.
+44. $15 normally; Platinum → $0.
+45. Both $10; warranty covers returns, not exchange fees.
+46. Nov 25–Dec 5; Gold exempt.
+47. Groceries cannot be exchanged; Furniture = $10.
+48. Electronics $15; Furniture $50; warranty covers both categories.
+49. Apparel: $0 return and $0 exchange.
+50. Bronze → neither waived; standard fees apply.
